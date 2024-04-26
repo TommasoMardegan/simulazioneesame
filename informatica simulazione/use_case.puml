@@ -1,27 +1,65 @@
-@startuml
+@startuml usecase
 
 left to right direction
 skinparam packageStyle rectangle
 
 actor "Cliente Non Registrato" as ClienteNonRegistrato
 actor Cliente as Cliente
+actor "Server" as server
+actor "admin" as admin
 
-rectangle "Sistema di Noleggio Biciclette" {
-    usecase "Registrazione" as Registrazione
-    usecase "Visualizza la Mappa delle Stazioni" as VisualizzaMappaStazioni
-    ClienteNonRegistrato --> Registrazione
-    ClienteNonRegistrato --> VisualizzaMappaStazioni
+rectangle "Sistema di Noleggio Biciclette" {  
+    rectangle "operazioni utente non registrato" {
+        usecase "Registrazione" as Registrazione
+        usecase "Riceve tessera" as riceveTessera
+        usecase "Visualizza la Mappa delle Stazioni" as VisualizzaMappaStazioni
+        ClienteNonRegistrato --> Registrazione
+        ClienteNonRegistrato --> VisualizzaMappaStazioni
+    }
+    rectangle "operazioni utente registrato" {
+        usecase "Si Autentica" as SiAutentica
+        usecase "visualizza riepilogo" as riepilogoUtente
+        usecase "Noleggia Bicicletta" as NoleggiaBicicletta
+        usecase "Consegna Bicicletta" as ConsegnaBicicletta
+        usecase "Usa Tessera" as UsaTessera
+        usecase "Visualizza la Mappa delle Stazioni" as VisualizzaMappaStazioniCliente
+        Cliente --> SiAutentica
+        Cliente --> NoleggiaBicicletta
+        Cliente --> ConsegnaBicicletta
+        Cliente --> VisualizzaMappaStazioniCliente
+        Cliente --> riepilogoUtente
+        Registrazione --> riceveTessera
+        NoleggiaBicicletta --> UsaTessera
+    }
+    rectangle "Monitoraggio servizio" {
+        usecase "Monitoraggio" as monitoraAdmin
+        usecase "Stampe" as stampe
+        usecase "Riepilogo" as riepilogo
+        usecase "Stampa operazioni per user" as stampaOpUser
+        usecase "Stampa operazioni per stazione" as stampaOpStazione
+        usecase "Biciclette non riconsegnate" as bicicletteNonRiconsegnate
+        usecase "Posizione biciclette" as posizioneBiciclette
+        usecase "visualizza biciclette manutenzione" as biciManutenzione
+        admin --> monitoraAdmin
+        admin --> riepilogo
+        monitoraAdmin --> stampe
+        stampe --> stampaOpUser
+        stampe --> stampaOpStazione
+        stampe --> bicicletteNonRiconsegnate
+        stampe --> posizioneBiciclette
+        stampe --> biciManutenzione
+    }
+    usecase "tariffazione" as tariffazione
+    rectangle "manutenzione servizio" {
+        usecase "inserimento bicicletta" as inserimento
+        usecase "cancellazione bicicletta" as cancellazione
+        usecase "altri casi" as casi
+        server --> inserimento
+        server --> cancellazione
+        server --> casi
+    }
+    server-->tariffazione
 }
 
-rectangle "Sistema di Noleggio Biciclette" {
-    usecase "Noleggia Bicicletta" as NoleggiaBicicletta
-    usecase "Consegna Bicicletta" as ConsegnaBicicletta
-    usecase "Usa Tessera" as UsaTessera
-    usecase "Visualizza la Mappa delle Stazioni" as VisualizzaMappaStazioniCliente
-    Cliente --> NoleggiaBicicletta
-    Cliente --> ConsegnaBicicletta
-    Cliente --> UsaTessera
-    Cliente --> VisualizzaMappaStazioniCliente
-}
 
 @enduml
