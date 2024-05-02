@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Apr 29, 2024 alle 22:01
+-- Creato il: Mag 02, 2024 alle 22:57
 -- Versione del server: 10.4.28-MariaDB
 -- Versione PHP: 8.2.4
 
@@ -24,27 +24,64 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `bicicletta`
+-- Struttura della tabella `admin`
 --
 
-CREATE TABLE `bicicletta` (
-  `codiceUnivoco` int(11) NOT NULL,
-  `modello` int(11) NOT NULL,
-  `idStazione` int(11) NOT NULL
+CREATE TABLE `admin` (
+  `email` varchar(32) NOT NULL,
+  `password` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `operazioniutenti`
+-- Struttura della tabella `bicicletta`
 --
 
-CREATE TABLE `operazioniutenti` (
-  `codiceUtente` int(11) NOT NULL,
+CREATE TABLE `bicicletta` (
+  `codiceRFID` int(11) NOT NULL,
+  `kmpercorsi` int(11) NOT NULL,
+  `codiceGPS` int(11) NOT NULL,
+  `longitudine` int(11) NOT NULL,
+  `latitudine` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `cliente`
+--
+
+CREATE TABLE `cliente` (
+  `email` varchar(32) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `codiceFiscale` varchar(18) NOT NULL,
+  `dataNascita` date NOT NULL,
+  `nome` varchar(32) NOT NULL,
+  `cognome` varchar(32) NOT NULL,
+  `numero` int(11) NOT NULL,
+  `CVV` int(11) NOT NULL,
+  `dataScadenza` date NOT NULL,
+  `città` varchar(32) NOT NULL,
+  `via` varchar(32) NOT NULL,
+  `numeroCivico` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `operazione`
+--
+
+CREATE TABLE `operazione` (
+  `id` int(11) NOT NULL,
+  `distanzaPercorsa` int(11) NOT NULL,
+  `dataOra` date NOT NULL,
+  `tariffa` int(11) NOT NULL,
+  `tipo` varchar(32) NOT NULL,
   `codiceBicicletta` int(11) NOT NULL,
-  `dataNoleggio` date NOT NULL,
-  `dataConsegna` date NOT NULL,
-  `importo` float NOT NULL
+  `email` varchar(32) NOT NULL,
+  `codiceStazione` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -54,34 +91,11 @@ CREATE TABLE `operazioniutenti` (
 --
 
 CREATE TABLE `stazione` (
-  `idStazione` int(11) NOT NULL,
-  `numeroPosti` int(11) NOT NULL,
-  `postiDisponibili` int(11) NOT NULL,
-  `via` varchar(32) NOT NULL,
-  `città` varchar(32) NOT NULL,
+  `codice` int(11) NOT NULL,
+  `numeroSlot` int(11) NOT NULL,
+  `città` int(11) NOT NULL,
+  `via` int(11) NOT NULL,
   `numeroCivico` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `utente`
---
-
-CREATE TABLE `utente` (
-  `nome` varchar(32) NOT NULL,
-  `cognome` varchar(32) NOT NULL,
-  `dataNascita` date NOT NULL,
-  `codiceFiscale` varchar(16) NOT NULL,
-  `codiceIdentificativo` int(11) NOT NULL,
-  `dataScadenza` date NOT NULL,
-  `CVV` int(3) NOT NULL,
-  `numero` int(11) NOT NULL,
-  `email` varchar(32) NOT NULL,
-  `password` varchar(32) NOT NULL,
-  `via` varchar(32) NOT NULL,
-  `città` varchar(32) NOT NULL,
-  `nCivico` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -89,16 +103,28 @@ CREATE TABLE `utente` (
 --
 
 --
+-- Indici per le tabelle `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`email`);
+
+--
 -- Indici per le tabelle `bicicletta`
 --
 ALTER TABLE `bicicletta`
-  ADD PRIMARY KEY (`codiceUnivoco`);
+  ADD PRIMARY KEY (`codiceRFID`);
 
 --
--- Indici per le tabelle `utente`
+-- Indici per le tabelle `cliente`
 --
-ALTER TABLE `utente`
-  ADD PRIMARY KEY (`codiceIdentificativo`);
+ALTER TABLE `cliente`
+  ADD PRIMARY KEY (`email`);
+
+--
+-- Indici per le tabelle `operazione`
+--
+ALTER TABLE `operazione`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT per le tabelle scaricate
@@ -108,13 +134,13 @@ ALTER TABLE `utente`
 -- AUTO_INCREMENT per la tabella `bicicletta`
 --
 ALTER TABLE `bicicletta`
-  MODIFY `codiceUnivoco` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `codiceRFID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `utente`
+-- AUTO_INCREMENT per la tabella `operazione`
 --
-ALTER TABLE `utente`
-  MODIFY `codiceIdentificativo` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `operazione`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
