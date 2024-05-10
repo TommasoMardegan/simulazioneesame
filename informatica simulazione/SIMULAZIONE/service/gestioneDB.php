@@ -42,6 +42,24 @@ class gestioneDB
             return false;
         }
     }
+    public function registrazione($email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico) {
+        // Query SQL per l'inserimento dei dati nella tabella "cliente"
+        $query = "INSERT INTO cliente (email, password, codiceFiscale, dataNascita, nome, cognome, numero, CVV, dataScadenza, città, via, numeroCivico) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+        // Prepara l'istruzione SQL
+        $stmt = $this->mysqli->prepare($query);
+    
+        // Collega i parametri alla dichiarazione preparata come stringa, stringa, ... ecc. 
+        $stmt->bind_param("ssssssssssss", $email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico);
+    
+        // Esegui l'istruzione preparata
+        if ($stmt->execute()) {
+            return true; // Ritorna true se l'inserimento ha avuto successo
+        } else {
+            return false; // Ritorna false se c'è stato un errore durante l'inserimento
+        }
+    }
+    
     
 }
 ?>
