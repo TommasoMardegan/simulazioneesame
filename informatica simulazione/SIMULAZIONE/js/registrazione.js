@@ -29,6 +29,7 @@ $(document).ready(function() {
         }, function(data) {
             dataParsed = JSON.parse(data);
             if(dataParsed["statoRegistrazione"] == true) {
+                alert("registrazione avvenuta con successo!");
                 window.location.href = "../html/login.html";
             }
             else {
