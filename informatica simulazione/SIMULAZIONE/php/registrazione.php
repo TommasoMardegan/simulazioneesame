@@ -15,8 +15,10 @@ if(isset($_GET['email']) && isset($_GET['password']) && isset($_GET['codiceFisca
     $citta = $_GET['citta'];
     $via = $_GET['via'];
     $numeroCivico = $_GET['numeroCivico'];
+    $provincia = $_GET['provincia'];
+    $regione = $_GET['regione'];
 
-    $result = $gestoreDb->registrazione($email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico);
+    $result = $gestoreDb->registrazione($email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico, $provincia, $regione);
 
     $status = "ok";
     $response = array(

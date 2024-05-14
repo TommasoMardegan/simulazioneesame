@@ -12,6 +12,8 @@ $(document).ready(function() {
         let citta =document.getElementById("citta").value;
         let via =document.getElementById("via").value;
         let numeroCivico =document.getElementById("numeroCivico").value;
+        let provincia =document.getElementById("provincia").value;
+        let regione =document.getElementById("regione").value;
 
         $.get("../php/registrazione.php", { 
             email: email, 
@@ -25,7 +27,9 @@ $(document).ready(function() {
             dataScadenzaCarta: dataScadenzaCarta,
             citta: citta,
             via: via,
-            numeroCivico: numeroCivico
+            numeroCivico: numeroCivico,
+            provincia: provincia,
+            regione: regione
         }, function(data) {
             dataParsed = JSON.parse(data);
             if(dataParsed["statoRegistrazione"] == true) {
