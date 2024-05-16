@@ -92,54 +92,38 @@ class gestioneDB
         }
     }
     
-    //OTTENGO LATITUDINE E LONGITUDINE DELLE STAZIONI
-    public function getLocations() {
+    //OTTENGO LE INFORMAZIONI DELLE STAZIONI
+    public function getStazioni() {
         // Query per selezionare i dati delle stazioni
         $query = "SELECT codice, citta, via, numeroCivico, provincia, regione FROM stazione";
-
+    
         // Esegui la query
         $result = $this->mysqli->query($query);
-
-        // Array per memorizzare le coordinate di latitudine e longitudine di ogni stazione
-        $coordinates = array();
-
+    
+        // Array per memorizzare i dati delle stazioni
+        $stations = array();
+    
         // Verifica se ci sono risultati dalla query
         if ($result->num_rows > 0) {
             // Cicla su ogni riga di risultato
             while ($row = $result->fetch_assoc()) {
-                // Dati dell'indirizzo della stazione
-                $via = urlencode($row['via']);
-                $numeroCivico = urlencode($row['numeroCivico']);
-                $città = urlencode($row['citta']);
-                $provincia = urlencode($row['provincia']);
-                $regione = urlencode($row['regione']);
-
-                // URL per la richiesta all'API di Google Maps Geocoding
-                $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$via},{$numeroCivico},{$città},{$provincia},{$regione}&key=TUA_API_KEY";
-
-                // Effettua la richiesta all'API
-                $response = file_get_contents($url);
-
-                // Decodifica la risposta JSON
-                $data = json_decode($response);
-
-                // Verifica se la richiesta ha avuto successo
-                if ($data->status == 'OK') {
-                    // Ottieni le coordinate di latitudine e longitudine
-                    $latitudine = $data->results[0]->geometry->location->lat;
-                    $longitudine = $data->results[0]->geometry->location->lng;
-
-                    // Aggiungi le coordinate all'array
-                    $coordinates[$row['codice']] = array('latitudine' => $latitudine, 'longitudine' => $longitudine);
-                }
+                $station = array(
+                    'via' => $row['via'],
+                    'citta' => $row['citta'],
+                    'provincia' => $row['provincia'],
+                    'regione' => $row['regione']
+                );
+    
+                // Aggiungi i dati della stazione all'array
+                $stations[] = $station;
             }
         }
-
+    
         // Chiudi la connessione al database
         $this->mysqli->close();
-
-        // Restituisci l'array con le coordinate di latitudine e longitudine di ogni stazione
-        return $coordinates;
-    }   
+    
+        // Restituisci l'array delle stazioni come JSON
+        return $stations;
+    }
 }
 ?>

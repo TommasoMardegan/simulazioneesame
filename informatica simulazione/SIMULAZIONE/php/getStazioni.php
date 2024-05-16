@@ -2,7 +2,7 @@
 include_once("../service/gestioneDB.php");
 $gestoreDb = new gestioneDB();
 
-$result = $gestoreDb->getLocations();
+$result = $gestoreDb->getStazioni();
 
 $status = "ok";
 $response = array(
