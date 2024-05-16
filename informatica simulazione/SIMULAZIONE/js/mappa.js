@@ -34,7 +34,7 @@ $(document).ready(function () {
             loadMap();
             // Aggiungi un marker per ogni stazione
             stazioni.forEach(function (station) {
-                findLatLonAddMarker(station.via + ', ' + station.citta + ', ' + station.provincia + ', ' + station.regione + ', ' + 'Italy');
+                findLatLonAddMarker(station.numeroCivico + ',' + station.via + ', ' + station.citta + ', ' + station.provincia + ', ' + station.regione + ', ' + 'Italy');
             });
         });
     });

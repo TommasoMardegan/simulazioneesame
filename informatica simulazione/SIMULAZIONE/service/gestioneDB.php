@@ -108,6 +108,7 @@ class gestioneDB
             // Cicla su ogni riga di risultato
             while ($row = $result->fetch_assoc()) {
                 $station = array(
+                    'numeroCivico' => $row['numeroCivico'],
                     'via' => $row['via'],
                     'citta' => $row['citta'],
                     'provincia' => $row['provincia'],
