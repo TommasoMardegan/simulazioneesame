@@ -13,4 +13,7 @@ $(document).ready(function() {
             }
         });
     });
+    $("#buttonAdmin").click(function () {
+        window.location.href = "../html/loginAdmin.html";
+    });
 });
