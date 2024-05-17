@@ -18,7 +18,20 @@ $(document).ready(function () {
             if (data.length > 0) {
                 var lat = parseFloat(data[0].lat);
                 var lon = parseFloat(data[0].lon);
-                L.marker([lat, lon]).addTo(mymap).bindPopup(address);
+                var marker = L.marker([lat, lon]).addTo(mymap).bindPopup(address);
+                
+                // Aggiungi l'evento 'click' a ciascun marker
+                marker.on('click', function(e) {
+                    // Prendo latitudine e longitudine del parcheggio
+                    let latitudine = e.latlng.lat;
+                    let longitudine = e.latlng.lng;
+                    
+                    // Pagina da visualizzare
+                    let pagina = "../html/parcheggio.php?latitudine=" + latitudine + "&longitudine=" + longitudine;
+                    
+                    // Apro pagina che visualizza il parcheggio
+                    window.location.href = pagina;
+                });
             }
         });
     }
