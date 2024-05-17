@@ -7,7 +7,8 @@ $(document).ready(function () {
         // Effettua una richiesta AJAX per ottenere le biciclette dal server
         $.get('../php/getBiciclette.php', function (data) {
             // Parsifica i dati JSON ricevuti
-            var biciclette = JSON.parse(data);
+            var bicicletteJson = JSON.parse(data);
+            var biciclette = bicicletteJson["message"];
             // Ottieni l'elemento tbody della tabella
             var bicicletteList = $('#biciclette-list');
             // Svuota il contenuto attuale della tabella
