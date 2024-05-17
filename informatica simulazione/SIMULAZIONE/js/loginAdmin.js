@@ -5,7 +5,7 @@ $(document).ready(function() {
 
         $.get("../php/loginAdmin.php", { email: email, password: password }, function(data) {
             dataParsed = JSON.parse(data);
-            if(dataParsed["statoLogin"] == true) {
+            if(dataParsed["statoLogin"] == "true") {
                 window.location.href = "../html/homeAdmin.html";
             }
             else {

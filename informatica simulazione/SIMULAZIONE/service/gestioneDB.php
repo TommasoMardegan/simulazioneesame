@@ -126,5 +126,37 @@ class gestioneDB
         // Restituisci l'array delle stazioni come JSON
         return $stations;
     }
+    // Metodo per ottenere tutte le biciclette
+    public function getBiciclette() {
+        // Query per selezionare i dati delle biciclette
+        $query = "SELECT codiceRFID, kmpercorsi, codiceGPS, longitudine, latitudine FROM bicicletta";
+        
+        // Esegui la query
+        $result = $this->mysqli->query($query);
+        
+        // Array per memorizzare i dati delle biciclette
+        $biciclette = array();
+        
+        // Verifica se ci sono risultati dalla query
+        if ($result->num_rows > 0) {
+            // Cicla su ogni riga di risultato
+            while ($row = $result->fetch_assoc()) {
+                $bicicletta = array(
+                    'codiceRFID' => $row['codiceRFID'],
+                    'kmpercorsi' => $row['kmpercorsi'],
+                    'codiceGPS' => $row['codiceGPS'],
+                    'longitudine' => $row['longitudine'],
+                    'latitudine' => $row['latitudine']
+                );
+                
+                // Aggiungi i dati della bicicletta all'array
+                $biciclette[] = $bicicletta;
+            }
+        }
+        
+        // Restituisci l'array delle biciclette
+        return $biciclette;
+    }
+
 }
 ?>

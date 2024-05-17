@@ -32,6 +32,9 @@ $(document).ready(function () {
                     // Apro pagina che visualizza il parcheggio
                     window.location.href = pagina;
                 });
+
+                // Apri automaticamente il popup per mostrare le informazioni del marker
+                marker.openPopup();
             }
         });
     }
