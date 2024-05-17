@@ -36,7 +36,7 @@ $(document).ready(function () {
         });
     }
 
-    $("#caricaMappa").click(function () {
+    function loadStazioni() {
         // Carica i dati delle stazioni
         $.get('../php/getStazioni.php', {}, function (data) {
             // Decodifica i dati JSON
@@ -50,5 +50,6 @@ $(document).ready(function () {
                 findLatLonAddMarker(station.numeroCivico + ',' + station.via + ', ' + station.citta + ', ' + station.provincia + ', ' + station.regione + ', ' + 'Italy');
             });
         });
-    });
+    }
+    loadStazioni();
 });
