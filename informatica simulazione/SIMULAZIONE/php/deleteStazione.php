@@ -1,8 +1,8 @@
 <?php
 include_once("../service/gestioneDB.php");
 $gestoreDb = new gestioneDB();
-if (isset($_POST["codiceRFID"])) {
-    $result = $gestoreDb->deleteBicicletta($_POST["codiceRFID"]);
+if (isset($_POST["codice"])) {
+    $result = $gestoreDb->deleteStazione($_POST["codice"]);
 
     $status = "ok";
     $response = array(

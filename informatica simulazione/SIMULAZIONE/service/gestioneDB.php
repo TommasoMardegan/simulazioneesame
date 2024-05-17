@@ -95,7 +95,7 @@ class gestioneDB
     //OTTENGO LE INFORMAZIONI DELLE STAZIONI
     public function getStazioni() {
         // Query per selezionare i dati delle stazioni
-        $query = "SELECT codice, citta, via, numeroCivico, provincia, regione FROM stazione";
+        $query = "SELECT codice, numeroSlot, citta, via, numeroCivico, provincia, regione FROM stazione";
     
         // Esegui la query
         $result = $this->mysqli->query($query);
@@ -108,6 +108,8 @@ class gestioneDB
             // Cicla su ogni riga di risultato
             while ($row = $result->fetch_assoc()) {
                 $station = array(
+                    'codice' => $row['codice'],
+                    'numeroSlot' => $row['numeroSlot'],
                     'numeroCivico' => $row['numeroCivico'],
                     'via' => $row['via'],
                     'citta' => $row['citta'],
@@ -186,6 +188,70 @@ class gestioneDB
         // Restituisci true se l'inserimento è avvenuto con successo
         return true;
     }
+    public function deleteBicicletta($codiceRFID) {
+        // Prepara la query per eliminare la bicicletta dal database
+        $stmt = $this->mysqli->prepare("DELETE FROM bicicletta WHERE codiceRFID = ?");
+        
+        // Bind dei parametri e dell'identificatore
+        $stmt->bind_param("s", $codiceRFID);
 
+        // Esegui la query
+        $codiceRFID = $_POST["codiceRFID"];
+        if ($stmt->execute()) {
+            $stmt->close();
+            // Se l'eliminazione ha avuto successo, restituisci "success"
+            return true;
+        } else {
+            $stmt->close();
+            // Se si è verificato un errore durante l'eliminazione, restituisci un messaggio di errore
+            return false;
+        }
+    }
+    public function deleteStazione($codice) {
+        // Prepara la query per eliminare la bicicletta dal database
+        $stmt = $this->mysqli->prepare("DELETE FROM stazione WHERE codice = ?");
+        
+        // Bind dei parametri e dell'identificatore
+        $stmt->bind_param("i", $codice);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            // Se l'eliminazione ha avuto successo, restituisci "success"
+            return true;
+        } else {
+            $stmt->close();
+            // Se si è verificato un errore durante l'eliminazione, restituisci un messaggio di errore
+            return false;
+        }
+    }
+    public function inserisciStazione($codice, $numeroSlot, $citta, $via, $numeroCivico, $provincia, $regione) {
+        // Prepara la query per l'inserimento dei dati della stazione
+        $query = "INSERT INTO stazione (codice, numeroSlot, citta, via, numeroCivico, provincia, regione) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
+        // Prepara lo statement
+        $stmt = $this->mysqli->prepare($query);
+        
+        // Verifica se lo statement è stato preparato correttamente
+        if ($stmt === false) {
+            die("Errore durante la preparazione dello statement: " . $this->mysqli->error);
+        }
+        
+        // Bind dei parametri
+        $stmt->bind_param("iississ", $codice, $numeroSlot, $citta, $via, $numeroCivico, $provincia, $regione);
+        
+        // Esegui lo statement
+        $result = $stmt->execute();
+        
+        // Verifica se l'esecuzione dello statement è avvenuta con successo
+        if ($result === false) {
+            die("Errore durante l'esecuzione dello statement: " . $stmt->error);
+        }
+        
+        // Chiudi lo statement
+        $stmt->close();
+        
+        // Restituisci true se l'inserimento è avvenuto con successo
+        return true;
+    }
 }
 ?>

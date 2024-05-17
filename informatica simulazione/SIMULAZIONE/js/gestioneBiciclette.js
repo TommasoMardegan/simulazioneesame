@@ -37,8 +37,9 @@ $(document).ready(function () {
         var codiceRFID = $(this).data('codice');
         // Effettua una richiesta AJAX per eliminare la bicicletta
         $.post('../php/deleteBicicletta.php', { codiceRFID: codiceRFID }, function (data) {
+            dataParsed = JSON.parse(data);
             // Se l'eliminazione ha avuto successo, ricarica la lista delle biciclette
-            if (data === 'success') {
+            if (dataParsed["message"] === true) {
                 loadBiciclette();
             } else {
                 // Altrimenti, mostra un messaggio di errore
