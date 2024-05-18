@@ -26,6 +26,7 @@ $(document).ready(function () {
                 row += '<td>' + stazione.regione + '</td>';
                 // Aggiungi il pulsante per eliminare la stazione
                 row += '<td><button class="btn btn-danger btn-sm delete-btn" data-codice="' + stazione.codice + '">Elimina</button></td>';
+                row += '<td><button class="btn btn-warning btn-sm edit-btn" data-codice="' + stazione.codice + '">Modifica</button></td>';
                 row += '</tr>';
                 // Aggiungi la riga alla tabella
                 stazioniList.append(row);
@@ -48,5 +49,11 @@ $(document).ready(function () {
                 alert('Si è verificato un errore durante l\'eliminazione della stazione.');
             }
         });
+    });
+    $(document).on('click', '.edit-btn', function () {
+        // Ottieni il codice RFID della bicicletta da modificare
+        var codice = $(this).data('codice');
+        // Reindirizza alla pagina di modifica con il codice RFID come parametro URL
+        window.location.href = 'modificaStazione.html?codice=' + codice;
     });
 });

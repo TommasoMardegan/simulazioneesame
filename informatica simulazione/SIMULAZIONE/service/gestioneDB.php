@@ -318,6 +318,25 @@ class gestioneDB
         $stmt->close();
         return $result;
     }
+    // Metodo per ottenere i dettagli di una stazione dato il codice
+    public function getStazione($codice) {
+        $stmt = $this->mysqli->prepare("SELECT * FROM stazione WHERE codice = ?");
+        $stmt->bind_param("s", $codice);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stazione = $result->fetch_assoc();
+        $stmt->close();
+        return $stazione;
+    }
+
+    // Metodo per aggiornare i dettagli di una stazione
+    public function updateStazione($codice, $numeroSlot, $citta, $via, $numeroCivico, $provincia, $regione) {
+        $stmt = $this->mysqli->prepare("UPDATE stazione SET numeroSlot = ?, citta = ?, via = ?, numeroCivico = ?, provincia = ?, regione = ? WHERE codice = ?");
+        $stmt->bind_param("issssss", $numeroSlot, $citta, $via, $numeroCivico, $provincia, $regione, $codice);
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+    }
 
 }
 ?>
