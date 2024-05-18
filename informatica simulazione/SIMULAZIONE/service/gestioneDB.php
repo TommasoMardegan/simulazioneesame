@@ -33,6 +33,7 @@ class gestioneDB
             session_start();
             //salvo la mail in sessione
             $_SESSION["email"] = $email;
+            $_SESSION["tipo"] = "utente";
             // L'associazione email-password esiste, quindi le credenziali sono corrette
             $stmt->close(); // Chiudi lo statement
             return true;
@@ -82,6 +83,7 @@ class gestioneDB
             session_start();
             //salvo la mail in sessione
             $_SESSION["email"] = $email;
+            $_SESSION["tipo"] = "admin";
             // L'associazione email-password esiste, quindi le credenziali sono corrette
             $stmt->close(); // Chiudi lo statement
             return true;
@@ -252,6 +254,43 @@ class gestioneDB
         
         // Restituisci true se l'inserimento è avvenuto con successo
         return true;
+    }
+    //ottengo il numero dei posti TOTALI, non solo i disponibili
+    public function getNumeroPosti($codice) {
+        try {
+            // Prepara la query per ottenere il numero di posti disponibili
+            $stmt = $this->mysqli->prepare("SELECT numeroSlot FROM stazione WHERE codice = ?");
+            $stmt->bind_param('i', $codice); // 'i' indica che il parametro è un intero
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+
+            if ($row) {
+                return $row['numeroSlot'];
+            } else {
+                return "null";
+            }
+        } catch (Exception $e) {
+            echo "Errore di esecuzione della query: " . $e->getMessage();
+            return "null";
+        }
+    }
+    //aggiorno i numeri TOTALI di posti del parcheggio
+    public function updateNumeroPosti($codice, $numeroPosti) {
+        try {
+            // Prepara e esegui l'istruzione SQL per aggiornare il numero di posti
+            $stmt = $this->mysqli->prepare("UPDATE stazione SET numeroSlot = ? WHERE codice = ?");
+            $stmt->bind_param('is', $numeroPosti, $codice);
+            $stmt->execute();
+
+            // Verifica se l'aggiornamento ha avuto successo
+            $rowCount = $stmt->affected_rows; // Restituisce il numero di righe interessate
+            $stmt->close();
+            return $rowCount > 0; // Se almeno una riga è stata aggiornata, restituisce true
+        } catch (Exception $e) {
+            echo "Errore di esecuzione della query: " . $e->getMessage();
+            return false; // Restituisce false se si verifica un errore
+        }
     }
 }
 ?>

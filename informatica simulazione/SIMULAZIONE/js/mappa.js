@@ -11,7 +11,7 @@ $(document).ready(function () {
         }).addTo(mymap);
     }
 
-    function findLatLonAddMarker(address) {
+    function findLatLonAddMarker(address, codice) {
         var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address);
 
         $.getJSON(url, function (data) {
@@ -19,7 +19,7 @@ $(document).ready(function () {
                 var lat = parseFloat(data[0].lat);
                 var lon = parseFloat(data[0].lon);
                 var marker = L.marker([lat, lon]).addTo(mymap).bindPopup(address);
-                
+
                 // Aggiungi l'evento 'click' a ciascun marker
                 marker.on('click', function(e) {
                     // Prendo latitudine e longitudine del parcheggio
@@ -27,7 +27,7 @@ $(document).ready(function () {
                     let longitudine = e.latlng.lng;
                     
                     // Pagina da visualizzare
-                    let pagina = "../html/parcheggio.php?latitudine=" + latitudine + "&longitudine=" + longitudine;
+                    let pagina = "../html/parcheggio.php?latitudine=" + latitudine + "&longitudine=" + longitudine + "&codice=" + codice;
                     
                     // Apro pagina che visualizza il parcheggio
                     window.location.href = pagina;
@@ -50,7 +50,8 @@ $(document).ready(function () {
             loadMap();
             // Aggiungi un marker per ogni stazione
             stazioni.forEach(function (station) {
-                findLatLonAddMarker(station.numeroCivico + ',' + station.via + ', ' + station.citta + ', ' + station.provincia + ', ' + station.regione + ', ' + 'Italy');
+                // Passa l'indirizzo e l'ID del parcheggio alla funzione findLatLonAddMarker
+                findLatLonAddMarker(station.numeroCivico + ',' + station.via + ', ' + station.citta + ', ' + station.provincia + ', ' + station.regione + ', ' + 'Italy', station.codice);
             });
         });
     }
