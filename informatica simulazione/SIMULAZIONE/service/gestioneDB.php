@@ -292,5 +292,32 @@ class gestioneDB
             return false; // Restituisce false se si verifica un errore
         }
     }
+    //ottengo i dati della bicicletta
+    public function getBicicletta($codiceRFID) {
+        // Prepara la query SQL
+        $stmt = $this->mysqli->prepare("SELECT * FROM bicicletta WHERE codiceRFID = ?");
+        $stmt->bind_param("s", $codiceRFID);
+
+        // Esegui la query
+        $stmt->execute();
+
+        // Ottieni il risultato
+        $result = $stmt->get_result();
+        $bicicletta = $result->fetch_assoc();
+
+        // Chiudi lo statement
+        $stmt->close();
+
+        return $bicicletta;
+    }
+    //aggiornamento dei dati della bicicletta
+    public function updateBicicletta($codiceRFID, $kmpercorsi, $codiceGPS, $longitudine, $latitudine) {
+        $stmt = $this->mysqli->prepare("UPDATE bicicletta SET kmpercorsi = ?, codiceGPS = ?, longitudine = ?, latitudine = ? WHERE codiceRFID = ?");
+        $stmt->bind_param("sssss", $kmpercorsi, $codiceGPS, $longitudine, $latitudine, $codiceRFID);
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+    }
+
 }
 ?>

@@ -24,6 +24,8 @@ $(document).ready(function () {
                 row += '<td>' + bicicletta.latitudine + '</td>';
                 // Aggiungi il pulsante per eliminare la bicicletta
                 row += '<td><button class="btn btn-danger btn-sm delete-btn" data-codice="' + bicicletta.codiceRFID + '">Elimina</button></td>';
+                // Aggiungi il pulsante per modificare la bicicletta
+                row += '<td><button class="btn btn-warning btn-sm edit-btn" data-codice="' + bicicletta.codiceRFID + '">Modifica</button></td>';
                 row += '</tr>';
                 // Aggiungi la riga alla tabella
                 bicicletteList.append(row);
@@ -46,5 +48,13 @@ $(document).ready(function () {
                 alert('Si è verificato un errore durante l\'eliminazione della bicicletta.');
             }
         });
+    });
+
+    // Gestisci il click sui pulsanti di modifica delle biciclette
+    $(document).on('click', '.edit-btn', function () {
+        // Ottieni il codice RFID della bicicletta da modificare
+        var codiceRFID = $(this).data('codice');
+        // Reindirizza alla pagina di modifica con il codice RFID come parametro URL
+        window.location.href = 'modificaBicicletta.html?codiceRFID=' + codiceRFID;
     });
 });
