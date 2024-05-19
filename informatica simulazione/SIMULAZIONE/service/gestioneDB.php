@@ -337,6 +337,24 @@ class gestioneDB
         $stmt->close();
         return $result;
     }
+    // Metodo per ottenere i dettagli di un cliente dato l'email
+    public function getCliente($email) {
+        $stmt = $this->mysqli->prepare("SELECT * FROM cliente WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $cliente = $result->fetch_assoc();
+        $stmt->close();
+        return $cliente;
+    }
 
+    // Metodo per aggiornare i dettagli di un cliente
+    public function updateCliente($email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numero, $CVV, $dataScadenza, $citta, $via, $numeroCivico) {
+        $stmt = $this->mysqli->prepare("UPDATE cliente SET password = ?, codiceFiscale = ?, dataNascita = ?, nome = ?, cognome = ?, numero = ?, CVV = ?, dataScadenza = ?, citta = ?, via = ?, numeroCivico = ? WHERE email = ?");
+        $stmt->bind_param("ssssssssssss", $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numero, $CVV, $dataScadenza, $citta, $via, $numeroCivico, $email);
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+    }
 }
 ?>
