@@ -18,6 +18,7 @@
         <p class="lead">Benvenuto nella piattaforma delle stazioni. Puoi consultare la mappa delle stazioni utilizzando il link sottostante.</p>
         <a href="consultaMappa.html" class="btn btn-primary">Consulta Mappa delle Stazioni</a>
         <a href="modificaCliente.html" class="btn btn-secondary">Modifica Informazioni Cliente</a>
+        <a href="../php/logout.php" class="btn btn-secondary">effettua il logout</a>
     </div>
 </body>
 </html>
