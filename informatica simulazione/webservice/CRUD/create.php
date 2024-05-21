@@ -9,18 +9,23 @@ $mysqli = new mysqli("localhost", "root", "", "simulazione");
 if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     //io so da dove noleggia perchè mi sto comportando come la stazione
     //mi serve idUtente e codiceBicicletta
-    if (isset($_GET['codiceBicicletta'])) {
+    if (isset($_GET['codiceBicicletta']) && isset($_GET['codiceUtente'])) {
         $tipo = $_GET['tipo'];
+        $codiceUtente = intval($_GET['codiceUtente']);
         $codiceBicicletta = intval($_GET['codiceBicicletta']);
-        $codiceStazione = 1;
+        //ATTENZIONE AL CODICE STAZIONE
+        $codiceStazione = 10;
+        $dataOra = date("Y-m-d H:i:s");
     
         // Prepara la query di inserimento
-        $query = "INSERT INTO operazione (tipo, codiceBicicletta, codiceStazione) VALUES (?, ?, ?)";
+        $query = "INSERT INTO operazione (tipo, distanzaPercorsa, tariffa, codiceBicicletta, codiceStazione, codiceUtente, dataOra) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($query);
     
         if ($stmt) {
             // Associa i parametri alla query
-            $stmt->bind_param("sii", $tipo, $codiceBicicletta, $codiceStazione);
+            $distanzaPercorsa = 0;
+            $tariffa = 0;
+            $stmt->bind_param("siiiiis", $tipo, $distanzaPercorsa, $tariffa, $codiceBicicletta, $codiceStazione, $codiceUtente, $dataOra);
     
             // Esegui la query
             if ($stmt->execute()) {
@@ -38,7 +43,7 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
         echo "Parametri mancanti. Assicurati di fornire 'tipo', 'codiceBicicletta' e 'codiceStazione'.";
     }
 } else if(isset($_GET['tipo'])  && $_GET['tipo'] == "consegna") {
-    
+
 }
 
 ?>
