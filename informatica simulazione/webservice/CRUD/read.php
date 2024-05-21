@@ -11,17 +11,32 @@ $codiceStazione = 10;
 //ESEMPIO: http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/read.php
 
 // Query per ottenere tutte le biciclette disponibili nel parcheggio specificato
-// OTTENGO SOLO LE BICI CHE SONO STATE NOLEGGIATE UN NUMERO DI VOLTE UGUALE A QUELLE CHE SONO STATE CONSEGNATE (quindi sono disponibili)
+// OTTENGO SOLO LE BICI CHE SONO STATE NOLEGGIATE UN NUMERO DI VOLTE UGUALE A QUELLE CHE SONO STATE CONSEGNATE (quindi sono disponibili) (tra tutte le stazioni)
 // OPPURE CHE NON SONO MAI STATE NOLEGGIATE
-$query = "
+/**$query = "
     SELECT codiceBicicletta
     FROM operazione
+    WHERE codiceStazione = ? 
+    AND codiceBicicletta NOT IN (
+        SELECT codiceBicicletta
+        FROM operazione
+        GROUP BY codiceBicicletta
+        HAVING COUNT(CASE WHEN tipo = 'noleggia' THEN 1 END) <> COUNT(CASE WHEN tipo = 'consegna' THEN 1 END)
+    )
+    GROUP BY codiceBicicletta;
+"; problema: se consegno alla stazione 11 ma numero noleggi == consegne allora me la disponibile nella stazione 10
+**/
+$query = "
+    SELECT codiceBicicletta
+    FROM operazione o1
     WHERE codiceStazione = ?
-    GROUP BY codiceBicicletta
-    HAVING COUNT(CASE WHEN tipo = 'noleggia' THEN 1 END) = COUNT(CASE WHEN tipo = 'consegna' THEN 1 END)
-       OR COUNT(CASE WHEN tipo = 'noleggia' THEN 1 END) = 0
+      AND tipo = 'consegna'
+      AND dataOra = (
+          SELECT MAX(dataOra)
+          FROM operazione o2
+          WHERE o1.codiceBicicletta = o2.codiceBicicletta
+      )
 ";
-
 $stmt = $mysqli->prepare($query);
 
 if ($stmt) {

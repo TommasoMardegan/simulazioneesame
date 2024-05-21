@@ -10,6 +10,7 @@ function calcolaTariffa($dataInizio, $dataFine) {
     $inizio = strtotime($dataInizio);
     $fine = strtotime($dataFine);
     $differenzaMinuti = ($fine - $inizio) / 60; // Differenza in minuti
+    var_dump($differenzaMinuti);
     $costoPerMinuto = 0.05; // Costo per minuto
     return $differenzaMinuti * $costoPerMinuto;
 }
@@ -28,6 +29,9 @@ function calcolaDistanza($lat1, $lon1, $lat2, $lon2) {
 
 
 //noleggio della bicicletta
+/**
+ * quando aggiungo una bici nuova è come se l'addetto noleggiasse la bici e la consegnasse alla stazione
+ */
 if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     //io so da dove noleggia perchè mi sto comportando come la stazione
     //mi serve idUtente e codiceBicicletta
@@ -110,7 +114,7 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     } else {
         echo "Parametri mancanti. Assicurati di fornire 'tipo', 'codiceBicicletta' e 'codiceUtente'.";
     }
-} //AGGIORNO LA POSIZIONE DELLA BICI E DI CONSEGUENZA CALCOLO I KM PERCORSI 
+} //AGGIORNO LA POSIZIONE DELLA BICI E DI CONSEGUENZA CALCOLO I KM PERCORSI (CALCOLO LA DISTANZA IN KM TRA LA LOT E LONG ATTUALE E QUELLA PRECEDENTEMENTE SALVATA)
 else if (isset($_GET['tipo']) && $_GET['tipo'] == "aggiorna_locazione") {
     if (isset($_GET['codiceGPS']) && isset($_GET['latitudine']) && isset($_GET['longitudine'])) {
         $codiceGPS = intval($_GET['codiceGPS']);
