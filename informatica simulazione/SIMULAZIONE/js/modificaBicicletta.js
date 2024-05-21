@@ -37,7 +37,6 @@ $(document).ready(function () {
             // Se il salvataggio ha avuto successo, reindirizza alla pagina principale
             if (dataParsed["message"] === true) {
                 alert('Modifiche salvate con successo.');
-                window.location.href = 'index.html';
             } else {
                 // Altrimenti, mostra un messaggio di errore
                 alert('Si è verificato un errore durante il salvataggio delle modifiche.');

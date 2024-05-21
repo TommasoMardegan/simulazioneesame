@@ -1,4 +1,10 @@
 <?php
+$mysqli;
+
+/**
+ * costruttore
+ */
+$mysqli = new mysqli("localhost", "root", "", "simulazione");
 //noleggio della bicicletta
 if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     //io so da dove noleggia perchè mi sto comportando come la stazione
@@ -10,7 +16,7 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     
         // Prepara la query di inserimento
         $query = "INSERT INTO operazione (tipo, codiceBicicletta, codiceStazione) VALUES (?, ?, ?)";
-        $stmt = $db->mysqli->prepare($query);
+        $stmt = $mysqli->prepare($query);
     
         if ($stmt) {
             // Associa i parametri alla query
@@ -32,7 +38,7 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
         echo "Parametri mancanti. Assicurati di fornire 'tipo', 'codiceBicicletta' e 'codiceStazione'.";
     }
 } else if(isset($_GET['tipo'])  && $_GET['tipo'] == "consegna") {
-
+    
 }
 
 ?>
