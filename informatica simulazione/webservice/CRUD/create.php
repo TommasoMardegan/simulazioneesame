@@ -14,6 +14,19 @@ function calcolaTariffa($dataInizio, $dataFine) {
     return $differenzaMinuti * $costoPerMinuto;
 }
 
+function calcolaDistanza($lat1, $lon1, $lat2, $lon2) {
+    $raggioTerra = 6371; // Raggio della Terra in km
+    $dLat = deg2rad($lat2 - $lat1);
+    $dLon = deg2rad($lon2 - $lon1);
+    $a = sin($dLat / 2) * sin($dLat / 2) +
+         cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+         sin($dLon / 2) * sin($dLon / 2);
+    $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+    $distanza = $raggioTerra * $c; // Distanza in km
+    return $distanza;
+}
+
+
 //noleggio della bicicletta
 if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     //io so da dove noleggia perchè mi sto comportando come la stazione
@@ -96,6 +109,47 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
         }
     } else {
         echo "Parametri mancanti. Assicurati di fornire 'tipo', 'codiceBicicletta' e 'codiceUtente'.";
+    }
+} //AGGIORNO LA POSIZIONE DELLA BICI E DI CONSEGUENZA CALCOLO I KM PERCORSI 
+else if (isset($_GET['tipo']) && $_GET['tipo'] == "aggiorna_locazione") {
+    if (isset($_GET['codiceGPS']) && isset($_GET['latitudine']) && isset($_GET['longitudine'])) {
+        $codiceGPS = intval($_GET['codiceGPS']);
+        $latitudine = floatval($_GET['latitudine']);
+        $longitudine = floatval($_GET['longitudine']);
+
+        // Ottieni la posizione precedente della bicicletta
+        $query = "SELECT latitudine, longitudine FROM bicicletta WHERE codiceGPS = ?";
+        $stmt = $mysqli->prepare($query);
+        if ($stmt) {
+            $stmt->bind_param("i", $codiceGPS);
+            $stmt->execute();
+            $stmt->bind_result($latitudinePrecedente, $longitudinePrecedente);
+            $stmt->fetch();
+            $stmt->close();
+        }
+
+        if (isset($latitudinePrecedente) && isset($longitudinePrecedente)) {
+            $distanza = calcolaDistanza($latitudinePrecedente, $longitudinePrecedente, $latitudine, $longitudine);
+        } else {
+            $distanza = 0; // Se non ci sono posizioni precedenti, la distanza è 0
+        }
+
+        // Aggiorna la posizione della bicicletta
+        $query = "UPDATE bicicletta SET latitudine = ?, longitudine = ?, kmpercorsi = kmpercorsi + ? WHERE codiceGPS = ?";
+        $stmt = $mysqli->prepare($query);
+        if ($stmt) {
+            $stmt->bind_param("dddi", $latitudine, $longitudine, $distanza, $codiceGPS);
+            if ($stmt->execute()) {
+                echo "Posizione aggiornata con successo!";
+            } else {
+                echo "Errore nell'aggiornamento della posizione: " . $stmt->error;
+            }
+            $stmt->close();
+        } else {
+            echo "Errore nella preparazione della query: " . $mysqli->error;
+        }
+    } else {
+        echo "Parametri mancanti. Assicurati di fornire 'codiceGPS', 'latitudine' e 'longitudine'.";
     }
 }
 ?>

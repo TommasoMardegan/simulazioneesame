@@ -7,6 +7,9 @@ if ($mysqli->connect_error) {
 
 $codiceStazione = 10;
 
+
+//ESEMPIO: http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/read.php
+
 // Query per ottenere tutte le biciclette disponibili nel parcheggio specificato
 // OTTENGO SOLO LE BICI CHE SONO STATE NOLEGGIATE UN NUMERO DI VOLTE UGUALE A QUELLE CHE SONO STATE CONSEGNATE (quindi sono disponibili)
 // OPPURE CHE NON SONO MAI STATE NOLEGGIATE
