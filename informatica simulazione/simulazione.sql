@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mag 14, 2024 alle 12:44
--- Versione del server: 10.4.32-MariaDB
--- Versione PHP: 8.2.12
+-- Creato il: Mag 21, 2024 alle 20:41
+-- Versione del server: 10.4.28-MariaDB
+-- Versione PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -53,6 +53,13 @@ CREATE TABLE `bicicletta` (
   `latitudine` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dump dei dati per la tabella `bicicletta`
+--
+
+INSERT INTO `bicicletta` (`codiceRFID`, `kmpercorsi`, `codiceGPS`, `longitudine`, `latitudine`) VALUES
+(111, 111, 111111, 111, 111);
+
 -- --------------------------------------------------------
 
 --
@@ -60,6 +67,7 @@ CREATE TABLE `bicicletta` (
 --
 
 CREATE TABLE `cliente` (
+  `ID` int(11) NOT NULL,
   `email` varchar(32) NOT NULL,
   `password` varchar(32) NOT NULL,
   `codiceFiscale` varchar(18) NOT NULL,
@@ -78,8 +86,8 @@ CREATE TABLE `cliente` (
 -- Dump dei dati per la tabella `cliente`
 --
 
-INSERT INTO `cliente` (`email`, `password`, `codiceFiscale`, `dataNascita`, `nome`, `cognome`, `numero`, `CVV`, `dataScadenza`, `citta`, `via`, `numeroCivico`) VALUES
-('user@a', '', 'aaa', '2024-05-18', 'Tommaso', 'Mardegan', 111, 111, '2024-05-11', 'barlassina', 'dei prati', 32);
+INSERT INTO `cliente` (`ID`, `email`, `password`, `codiceFiscale`, `dataNascita`, `nome`, `cognome`, `numero`, `CVV`, `dataScadenza`, `citta`, `via`, `numeroCivico`) VALUES
+(1, 'user@a', 'a', 'aaa', '2024-05-18', 'Tommaso', 'Mardegan', 111, 111, '2024-05-11', 'barlassina', 'dei prati', 32);
 
 -- --------------------------------------------------------
 
@@ -94,8 +102,8 @@ CREATE TABLE `operazione` (
   `tariffa` int(11) NOT NULL,
   `tipo` varchar(32) NOT NULL,
   `codiceBicicletta` int(11) NOT NULL,
-  `email` varchar(32) NOT NULL,
-  `codiceStazione` int(11) NOT NULL
+  `codiceStazione` int(11) NOT NULL,
+  `codiceUtente` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -119,7 +127,8 @@ CREATE TABLE `stazione` (
 --
 
 INSERT INTO `stazione` (`codice`, `numeroSlot`, `citta`, `via`, `numeroCivico`, `provincia`, `regione`) VALUES
-(1, 50, 'barlassina', 'dei prati', 32, 'monza e brianza', 'lombardia');
+(10, 70, 'barlassina', 'roma', 10, 'monza brianza', 'lombardia'),
+(11, 50, 'barlassina', 'dei prati', 10, 'monza brianza', 'lombardia');
 
 --
 -- Indici per le tabelle scaricate
@@ -141,13 +150,16 @@ ALTER TABLE `bicicletta`
 -- Indici per le tabelle `cliente`
 --
 ALTER TABLE `cliente`
-  ADD PRIMARY KEY (`email`);
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indici per le tabelle `operazione`
 --
 ALTER TABLE `operazione`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `codiceUtente` (`codiceUtente`),
+  ADD KEY `codiceBicicletta` (`codiceBicicletta`),
+  ADD KEY `codiceStazione` (`codiceStazione`);
 
 --
 -- Indici per le tabelle `stazione`
@@ -163,13 +175,31 @@ ALTER TABLE `stazione`
 -- AUTO_INCREMENT per la tabella `bicicletta`
 --
 ALTER TABLE `bicicletta`
-  MODIFY `codiceRFID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `codiceRFID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+
+--
+-- AUTO_INCREMENT per la tabella `cliente`
+--
+ALTER TABLE `cliente`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT per la tabella `operazione`
 --
 ALTER TABLE `operazione`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Limiti per le tabelle scaricate
+--
+
+--
+-- Limiti per la tabella `operazione`
+--
+ALTER TABLE `operazione`
+  ADD CONSTRAINT `operazione_ibfk_1` FOREIGN KEY (`codiceStazione`) REFERENCES `stazione` (`codice`),
+  ADD CONSTRAINT `operazione_ibfk_2` FOREIGN KEY (`codiceBicicletta`) REFERENCES `bicicletta` (`codiceRFID`),
+  ADD CONSTRAINT `operazione_ibfk_3` FOREIGN KEY (`codiceUtente`) REFERENCES `cliente` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
