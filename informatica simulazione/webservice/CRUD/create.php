@@ -11,7 +11,7 @@ function calcolaTariffa($dataInizio, $dataFine) {
     $fine = strtotime($dataFine);
     $differenzaMinuti = ($fine - $inizio) / 60; // Differenza in minuti
     var_dump($differenzaMinuti);
-    $costoPerMinuto = 0.05; // Costo per minuto
+    $costoPerMinuto = 0.10; // Costo per minuto
     return $differenzaMinuti * $costoPerMinuto;
 }
 
@@ -32,6 +32,7 @@ function calcolaDistanza($lat1, $lon1, $lat2, $lon2) {
 /**
  * quando aggiungo una bici nuova è come se l'addetto noleggiasse la bici e la consegnasse alla stazione
  */
+//ESEMPIO http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=noleggia&codiceBicicletta=110&codiceStazione=10&&codiceUtente=1
 if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     //io so da dove noleggia perchè mi sto comportando come la stazione
     //mi serve idUtente e codiceBicicletta
@@ -55,7 +56,7 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     
             // Esegui la query
             if ($stmt->execute()) {
-                echo "Dati inseriti con successo!";
+                echo "Noleggiata con successo!";
             } else {
                 echo "Errore nell'inserimento dei dati: " . $stmt->error;
             }
@@ -68,6 +69,7 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     } else {
         echo "Parametri mancanti. Assicurati di fornire 'tipo', 'codiceBicicletta' e 'codiceStazione'.";
     }
+//ESEMPIO: http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=consegna&codiceBicicletta=110&codiceStazione=10&&codiceUtente=1
 } else if(isset($_GET['tipo']) && $_GET['tipo'] == "consegna") {
     if (isset($_GET['codiceBicicletta']) && isset($_GET['codiceUtente'])) {
         $tipo = $_GET['tipo'];
