@@ -50,8 +50,12 @@ class gestioneDB
         // Prepara l'istruzione SQL
         $stmt = $this->mysqli->prepare($query);
     
-        // Collega i parametri alla dichiarazione preparata come stringa, stringa, ... ecc. 
-        $stmt->bind_param("ssssssssssss", $email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico);
+        if ($stmt === false) {
+            die('Prepare failed: ' . htmlspecialchars($this->mysqli->error));
+        }
+
+        // Collega i parametri alla dichiarazione preparata come stringa, stringa, ... ecc.
+        $stmt->bind_param("ssssssiisssiss", $email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico, $provincia, $regione);
     
         // Esegui l'istruzione preparata
         if ($stmt->execute()) {
