@@ -360,5 +360,22 @@ class gestioneDB
         $stmt->close();
         return $result;
     }
+    public function getOperazioniByUtente($codiceUtente) {
+        $query = "SELECT id, distanzaPercorsa, tariffa, tipo, codiceBicicletta, codiceStazione, dataOra 
+                  FROM operazione WHERE codiceUtente = ?";
+
+        $stmt = $this->mysqli->prepare($query);
+        //$tipo = "consegna";
+        if ($stmt) {
+            $stmt->bind_param("i", $codiceUtente);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $operazioni = $result->fetch_all(MYSQLI_ASSOC);
+            $stmt->close();
+            return $operazioni;
+        } else {
+            return [];
+        }
+    }
 }
 ?>

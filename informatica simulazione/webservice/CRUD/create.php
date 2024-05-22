@@ -13,8 +13,8 @@ function calcolaTariffa($dataInizio, $dataFine) {
     $inizio = strtotime($dataInizio);
     $fine = strtotime($dataFine);
     $differenzaMinuti = ($fine - $inizio) / 60; // Differenza in minuti
-    var_dump($differenzaMinuti);
-    $costoPerMinuto = 1; // Costo per minuto
+
+    $costoPerMinuto = 0.05; // Costo per minuto
     return $differenzaMinuti * $costoPerMinuto;
 }
 
@@ -101,7 +101,7 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
             $stmt = $mysqli->prepare($query);
 
             if ($stmt) {
-                $stmt->bind_param("siiiiis", $tipo, $distanzaPercorsa, $tariffa, $codiceBicicletta, $codiceStazione, $codiceUtente, $dataOraConsegna);
+                $stmt->bind_param("sidiiis", $tipo, $distanzaPercorsa, $tariffa, $codiceBicicletta, $codiceStazione, $codiceUtente, $dataOraConsegna);
 
                 if ($stmt->execute()) {
                     echo "Dati di consegna inseriti con successo!";

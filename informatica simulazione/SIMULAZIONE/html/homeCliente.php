@@ -19,6 +19,7 @@
         <a href="consultaMappa.html" class="btn btn-primary">Consulta Mappa delle Stazioni</a>
         <a href="modificaCliente.html" class="btn btn-secondary">Modifica Informazioni Cliente</a>
         <a href="../php/logout.php" class="btn btn-secondary">effettua il logout</a>
+        <a href="riepilogo.html" class="btn btn-primary">Riepilogo</a>
     </div>
 </body>
 </html>
