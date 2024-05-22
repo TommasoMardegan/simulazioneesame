@@ -161,26 +161,45 @@ else if (isset($_GET['tipo']) && $_GET['tipo'] == "aggiorna_locazione") {
         echo "Parametri mancanti. Assicurati di fornire 'codiceGPS', 'latitudine' e 'longitudine'.";
     }
 } else if (isset($_GET['tipo']) && $_GET['tipo'] == "aggiorna_distanza_operazione") {
-    if (isset($_GET['id'])) {
-        $id = intval($_GET['id']);
+    if (isset($_GET['codiceBicicletta'])) {
+        $codiceBicicletta = intval($_GET['codiceBicicletta']);
         $distanzaAggiuntiva = 1000; // distanza aggiuntiva in metri
 
-        $query = "UPDATE operazione SET distanzaPercorsa = distanzaPercorsa + ? WHERE id = ?";
+        // Trova l'ultima operazione di tipo noleggia per la bicicletta specificata
+        $query = "SELECT id FROM operazione WHERE codiceBicicletta = ? AND tipo = 'noleggia' ORDER BY dataOra DESC LIMIT 1";
         $stmt = $mysqli->prepare($query);
 
         if ($stmt) {
-            $stmt->bind_param("ii", $distanzaAggiuntiva, $id);
-            if ($stmt->execute()) {
-                echo "Distanza aggiornata con successo!";
-            } else {
-                echo "Errore nell'aggiornamento della distanza: " . $stmt->error;
-            }
+            $stmt->bind_param("i", $codiceBicicletta);
+            $stmt->execute();
+            $stmt->bind_result($idOperazione);
+            $stmt->fetch();
             $stmt->close();
+
+            if ($idOperazione) {
+                // Aggiorna la distanza percorsa per l'operazione trovata
+                $query = "UPDATE operazione SET distanzaPercorsa = distanzaPercorsa + ? WHERE id = ?";
+                $stmt = $mysqli->prepare($query);
+
+                if ($stmt) {
+                    $stmt->bind_param("ii", $distanzaAggiuntiva, $idOperazione);
+                    if ($stmt->execute()) {
+                        echo "Distanza aggiornata con successo!";
+                    } else {
+                        echo "Errore nell'aggiornamento della distanza: " . $stmt->error;
+                    }
+                    $stmt->close();
+                } else {
+                    echo "Errore nella preparazione della query: " . $mysqli->error;
+                }
+            } else {
+                echo "Nessuna operazione di noleggia trovata per la bicicletta specificata.";
+            }
         } else {
             echo "Errore nella preparazione della query: " . $mysqli->error;
         }
     } else {
-        echo "Parametro 'id' mancante. Assicurati di fornire 'id'.";
+        echo "Parametro 'codiceBicicletta' mancante. Assicurati di fornire 'codiceBicicletta'.";
     }
 }
 ?>
