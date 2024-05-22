@@ -6,6 +6,7 @@ $mysqli;
  */
 $mysqli = new mysqli("localhost", "root", "", "simulazione");
 //MI COMPORTO COME SE FOSSI IL PARCHEGGIO
+//QUINDI NON DEVO FARE CONTROLLI SPECIFICI PERCHE' MI ASPETTO CHE LA COLONNINA DEL PARCHEGGIO FUNZIONI CORRETTAMENTE
 function calcolaTariffa($dataInizio, $dataFine) {
     $inizio = strtotime($dataInizio);
     $fine = strtotime($dataFine);
