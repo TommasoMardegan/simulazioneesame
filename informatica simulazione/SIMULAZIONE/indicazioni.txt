@@ -1,8 +1,9 @@
 DA FARE:
 - AGGIORNA FUNZIONE CALCOLA TARIFFA OPERAZIONE 
 - AGGIORNA DISTANZA NELLA CONSEGNA  V
-- CREA REPORT (SELECT DALLE OPERAZIONI)
+- CREA REPORT (SELECT DALLE OPERAZIONI) V
+- stato bici, controllo solo se è in manutenzione
+- visualizza riepilogo con tutta distanza percorsa e quanto hai speso
 
 aggiuntive:
 - AGGIORNA DISTANZA NELLA CONSEGNA (usa gps eventualmente)
-stato bici

@@ -5,7 +5,7 @@ $(document).ready(function () {
     // Funzione per caricare il riepilogo delle operazioni
     function loadRiepilogo() {
         // Effettua una richiesta AJAX per ottenere il riepilogo delle operazioni dal server
-        $.get('../php/getRiepilogo.php', function (data) {
+        $.get('../php/getTragitti.php', function (data) {
             // Parsifica i dati JSON ricevuti
             var operazioni = JSON.parse(data);
             // Ottieni l'elemento tbody della tabella
@@ -18,6 +18,8 @@ $(document).ready(function () {
                 var row = '<tr>';
                 //row += '<td>' + operazione["id"] + '</td>';
                 if(operazione.tipo == "noleggia") {
+                    row += '<td></td>';
+                    row += '<td></td>';
                     row += '<td>' + operazione.tipo + '</td>';
                     row += '<td>' + operazione.codiceBicicletta + '</td>';
                     row += '<td>' + operazione.codiceStazione + '</td>';
