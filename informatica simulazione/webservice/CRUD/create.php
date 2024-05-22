@@ -11,7 +11,7 @@ function calcolaTariffa($dataInizio, $dataFine) {
     $fine = strtotime($dataFine);
     $differenzaMinuti = ($fine - $inizio) / 60; // Differenza in minuti
     var_dump($differenzaMinuti);
-    $costoPerMinuto = 0.10; // Costo per minuto
+    $costoPerMinuto = 1; // Costo per minuto
     return $differenzaMinuti * $costoPerMinuto;
 }
 
@@ -33,6 +33,7 @@ function calcolaDistanza($lat1, $lon1, $lat2, $lon2) {
  * quando aggiungo una bici nuova è come se l'addetto noleggiasse la bici e la consegnasse alla stazione
  */
 //ESEMPIO http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=noleggia&codiceBicicletta=110&codiceStazione=10&&codiceUtente=1
+//il cliente appoggia la tessera quindi l'id utente ce l'ho già
 if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     //io so da dove noleggia perchè mi sto comportando come la stazione
     //mi serve idUtente e codiceBicicletta
@@ -97,6 +98,7 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
             $stmt = $mysqli->prepare($query);
     
             if ($stmt) {
+                //aggiornare distanza percorsa
                 $distanzaPercorsa = 0;
                 $stmt->bind_param("siiiiis", $tipo, $distanzaPercorsa, $tariffa, $codiceBicicletta, $codiceStazione, $codiceUtente, $dataOraConsegna);
     
