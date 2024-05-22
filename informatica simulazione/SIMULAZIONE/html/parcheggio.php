@@ -16,10 +16,12 @@
     <div class="container mt-5">
     <?php
         session_start();
-        $tipo = $_SESSION["tipo"];
-        if($tipo == "admin") {
-            echo "nuovo numero di posti: <input type='number' id='numeroPostiInput'><br>";
-            echo "<button id='modificaBtn' class='btn btn-primary'>Modifica</button>";
+        if(isset($_SESSION["tipo"])) {
+            $tipo = $_SESSION["tipo"];
+            if($tipo == "admin") {
+                echo "nuovo numero di posti: <input type='number' id='numeroPostiInput'><br>";
+                echo "<button id='modificaBtn' class='btn btn-primary'>Modifica</button>";
+            }
         }
         ?>
     </div>
