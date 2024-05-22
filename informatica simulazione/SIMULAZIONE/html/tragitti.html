@@ -11,22 +11,25 @@
     <script src="../js/tragitti.js"></script>
 </head>
 <body>
-    <h1>Riepilogo dei tragitti</h1>
-    <table id="riepilogo-table">
-        <thead>
-            <tr>
-                <th>Distanza Percorsa (m)</th>
-                <th>Tariffa (€)</th>
-                <th>Tipo</th>
-                <th>Codice Bicicletta</th>
-                <th>Codice Stazione</th>
-                <th>Data Ora</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- I dati verranno inseriti qui da JavaScript -->
-        </tbody>
-    </table>
-    
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">Riepilogo dei Tragitti</h1>
+        <div class="table-responsive">
+            <table id="riepilogo-table" class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Distanza Percorsa (m)</th>
+                        <th>Tariffa (€)</th>
+                        <th>Tipo</th>
+                        <th>Codice Bicicletta</th>
+                        <th>Codice Stazione</th>
+                        <th>Data Ora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- I dati verranno inseriti qui da JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>
