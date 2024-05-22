@@ -159,5 +159,27 @@ else if (isset($_GET['tipo']) && $_GET['tipo'] == "aggiorna_locazione") {
     } else {
         echo "Parametri mancanti. Assicurati di fornire 'codiceGPS', 'latitudine' e 'longitudine'.";
     }
+} else if (isset($_GET['tipo']) && $_GET['tipo'] == "aggiorna_distanza_operazione") {
+    if (isset($_GET['id'])) {
+        $id = intval($_GET['id']);
+        $distanzaAggiuntiva = 1000; // distanza aggiuntiva in metri
+
+        $query = "UPDATE operazione SET distanzaPercorsa = distanzaPercorsa + ? WHERE id = ?";
+        $stmt = $mysqli->prepare($query);
+
+        if ($stmt) {
+            $stmt->bind_param("ii", $distanzaAggiuntiva, $id);
+            if ($stmt->execute()) {
+                echo "Distanza aggiornata con successo!";
+            } else {
+                echo "Errore nell'aggiornamento della distanza: " . $stmt->error;
+            }
+            $stmt->close();
+        } else {
+            echo "Errore nella preparazione della query: " . $mysqli->error;
+        }
+    } else {
+        echo "Parametro 'id' mancante. Assicurati di fornire 'id'.";
+    }
 }
 ?>
