@@ -26,6 +26,14 @@ $codiceStazione = 10;
     GROUP BY codiceBicicletta;
 "; problema: se consegno alla stazione 11 ma numero noleggi == consegne allora me la disponibile nella stazione 10
 **/
+/**
+ * casi:
+ * noleggia bici: funziona
+ * consegna bici: funziona
+ * noleggia bici e consegna in una stazione diversa (es: 11): funziona, la bici non è segnata come disponibile nella stazione 10
+ * se noleggio la bici: funziona, bici non segnata come disponibile
+ * se riconsegno la bici nella stessa stazione: funziona, segnata come disponibile
+ */
 $query = "
     SELECT codiceBicicletta
     FROM operazione o1

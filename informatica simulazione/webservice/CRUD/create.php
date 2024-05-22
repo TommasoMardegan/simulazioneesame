@@ -5,7 +5,7 @@ $mysqli;
  * costruttore
  */
 $mysqli = new mysqli("localhost", "root", "", "simulazione");
-
+//MI COMPORTO COME SE FOSSI IL PARCHEGGIO
 function calcolaTariffa($dataInizio, $dataFine) {
     $inizio = strtotime($dataInizio);
     $fine = strtotime($dataFine);
