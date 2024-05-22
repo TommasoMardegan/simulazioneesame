@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mag 21, 2024 alle 20:41
+-- Creato il: Mag 22, 2024 alle 07:21
 -- Versione del server: 10.4.28-MariaDB
 -- Versione PHP: 8.2.4
 
@@ -58,7 +58,8 @@ CREATE TABLE `bicicletta` (
 --
 
 INSERT INTO `bicicletta` (`codiceRFID`, `kmpercorsi`, `codiceGPS`, `longitudine`, `latitudine`) VALUES
-(111, 111, 111111, 111, 111);
+(110, 5189, 1, 9, 45),
+(111, 0, 2, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -87,7 +88,7 @@ CREATE TABLE `cliente` (
 --
 
 INSERT INTO `cliente` (`ID`, `email`, `password`, `codiceFiscale`, `dataNascita`, `nome`, `cognome`, `numero`, `CVV`, `dataScadenza`, `citta`, `via`, `numeroCivico`) VALUES
-(1, 'user@a', 'a', 'aaa', '2024-05-18', 'Tommaso', 'Mardegan', 111, 111, '2024-05-11', 'barlassina', 'dei prati', 32);
+(1, 'user@a', 'a', 'aaa', '2024-05-18', 'Tommaso', 'Mardegan', 111, 111, '2024-05-11', 'barlassina', 'dei cigni', 32);
 
 -- --------------------------------------------------------
 
@@ -98,13 +99,35 @@ INSERT INTO `cliente` (`ID`, `email`, `password`, `codiceFiscale`, `dataNascita`
 CREATE TABLE `operazione` (
   `id` int(11) NOT NULL,
   `distanzaPercorsa` int(11) NOT NULL,
-  `dataOra` date NOT NULL,
-  `tariffa` int(11) NOT NULL,
+  `tariffa` float NOT NULL,
   `tipo` varchar(32) NOT NULL,
   `codiceBicicletta` int(11) NOT NULL,
   `codiceStazione` int(11) NOT NULL,
-  `codiceUtente` int(11) NOT NULL
+  `codiceUtente` int(11) NOT NULL,
+  `dataOra` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `operazione`
+--
+
+INSERT INTO `operazione` (`id`, `distanzaPercorsa`, `tariffa`, `tipo`, `codiceBicicletta`, `codiceStazione`, `codiceUtente`, `dataOra`) VALUES
+(22, 0, 0, 'noleggia', 110, 10, 1, '2024-05-21 20:36:10'),
+(23, 0, 0, 'consegna', 110, 10, 1, '2024-05-21 20:36:28'),
+(24, 0, 0, 'noleggia', 110, 11, 1, '2024-05-21 20:36:49'),
+(25, 0, 0, 'consegna', 110, 10, 1, '2024-05-21 20:38:45'),
+(26, 0, 0, 'noleggia', 110, 10, 1, '2024-05-21 20:45:40'),
+(27, 0, 0, 'consegna', 110, 11, 1, '2024-05-21 20:45:53'),
+(28, 0, 0, 'consegna', 110, 10, 1, '2024-05-21 20:51:13'),
+(29, 0, 0, 'noleggia', 110, 10, 1, '2024-05-21 20:51:45'),
+(30, 0, 0, 'consegna', 110, 10, 1, '2024-05-21 21:01:54'),
+(31, 0, 0, 'noleggia', 110, 10, 1, '2024-05-21 21:02:12'),
+(32, 0, 0, 'noleggia', 110, 10, 1, '2024-05-21 21:05:43'),
+(33, 0, 0, 'consegna', 110, 10, 1, '2024-05-21 21:06:14'),
+(34, 0, 0, 'noleggia', 110, 10, 1, '2024-05-21 21:06:47'),
+(35, 0, 0, 'consegna', 110, 10, 1, '2024-05-21 21:07:15'),
+(36, 0, 0, 'noleggia', 110, 10, 1, '2024-05-21 21:08:31'),
+(37, 0, 0, 'consegna', 110, 10, 1, '2024-05-21 21:08:34');
 
 -- --------------------------------------------------------
 
@@ -187,7 +210,7 @@ ALTER TABLE `cliente`
 -- AUTO_INCREMENT per la tabella `operazione`
 --
 ALTER TABLE `operazione`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- Limiti per le tabelle scaricate
