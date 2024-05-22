@@ -83,12 +83,12 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
         $dataOraConsegna = date("Y-m-d H:i:s");
 
         // Ottieni la data di inizio del noleggio
-        $query = "SELECT dataOra FROM operazione WHERE codiceBicicletta = ? AND codiceUtente = ? AND tipo = 'noleggia' ORDER BY dataOra DESC LIMIT 1";
+        $query = "SELECT dataOra, distanzaPercorsa FROM operazione WHERE codiceBicicletta = ? AND codiceUtente = ? AND tipo = 'noleggia' ORDER BY dataOra DESC LIMIT 1";
         $stmt = $mysqli->prepare($query);
         if ($stmt) {
             $stmt->bind_param("ii", $codiceBicicletta, $codiceUtente);
             $stmt->execute();
-            $stmt->bind_result($dataOraInizio);
+            $stmt->bind_result($dataOraInizio, $distanzaPercorsa);
             $stmt->fetch();
             $stmt->close();
         }
@@ -99,18 +99,16 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
             // Inserisci i dati della consegna
             $query = "INSERT INTO operazione (tipo, distanzaPercorsa, tariffa, codiceBicicletta, codiceStazione, codiceUtente, dataOra) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $mysqli->prepare($query);
-    
+
             if ($stmt) {
-                //aggiornare distanza percorsa
-                $distanzaPercorsa = 0;
                 $stmt->bind_param("siiiiis", $tipo, $distanzaPercorsa, $tariffa, $codiceBicicletta, $codiceStazione, $codiceUtente, $dataOraConsegna);
-    
+
                 if ($stmt->execute()) {
                     echo "Dati di consegna inseriti con successo!";
                 } else {
                     echo "Errore nell'inserimento dei dati di consegna: " . $stmt->error;
                 }
-    
+
                 $stmt->close();
             } else {
                 echo "Errore nella preparazione della query: " . $mysqli->error;
