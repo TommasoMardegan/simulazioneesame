@@ -377,5 +377,34 @@ class gestioneDB
             return [];
         }
     }
+    public function getIdUtenteByEmail($email) {
+        $stmt = $this->mysqli->prepare("SELECT ID FROM cliente WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->bind_result($idUtente);
+        $stmt->fetch();
+        $stmt->close();
+        return $idUtente;
+    }
+    
+    public function getRiepilogo($idUtente) {
+        $stmt = $this->mysqli->prepare("
+            SELECT distanzaPercorsa, tariffa, tipo, codiceBicicletta, codiceStazione, dataOra 
+            FROM operazione
+            WHERE codiceUtente = ?
+        ");
+        $stmt->bind_param("i", $idUtente);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        $operazioni = [];
+        while ($row = $result->fetch_assoc()) {
+            $operazioni[] = $row;
+        }
+    
+        $stmt->close();
+        return $operazioni;
+    }
+    
 }
 ?>
