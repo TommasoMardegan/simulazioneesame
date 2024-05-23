@@ -37,14 +37,17 @@ $codiceStazione = 10;
 $query = "
     SELECT codiceBicicletta
     FROM operazione o1
-    WHERE codiceStazione = ?
-      AND tipo = 'consegna'
-      AND dataOra = (
-          SELECT MAX(dataOra)
+    JOIN bicicletta b ON o1.codiceBicicletta = b.codiceRFID
+    WHERE o1.codiceStazione = ?
+      AND o1.tipo = 'consegna'
+      AND b.manutenzione = 'n'
+      AND o1.dataOra = (
+          SELECT MAX(o2.dataOra)
           FROM operazione o2
           WHERE o1.codiceBicicletta = o2.codiceBicicletta
       )
 ";
+
 $stmt = $mysqli->prepare($query);
 
 if ($stmt) {
