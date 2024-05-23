@@ -1,6 +1,7 @@
 $(document).ready(function() {
-    event.preventDefault();
+    
     $("#registrazioneButton").click(function () {
+        event.preventDefault();
         let email =document.getElementById("email").value;
         let password =document.getElementById("password").value;
         let codiceFiscale =document.getElementById("codiceFiscale").value;

@@ -1,7 +1,8 @@
 <?php
 include_once("../service/gestioneDB.php");
 $gestoreDb = new gestioneDB();
-if(isset($_GET['email']) && isset($_GET['password']) && isset($_GET['codiceFiscale']) && isset($_GET['dataNascita']) && isset($_GET['nome']) && isset($_GET['cognome']) && isset($_GET['numeroCarta']) && isset($_GET['cvvCarta']) && isset($_GET['dataScadenzaCarta']) && isset($_GET['citta']) && isset($_GET['via']) && isset($_GET['numeroCivico'])) {
+if(isset($_GET['email']) && isset($_GET['password']) && isset($_GET['codiceFiscale']) && strlen($_GET['codiceFiscale']) == 16 
+&& isset($_GET['dataNascita']) && isset($_GET['nome']) && isset($_GET['cognome']) && isset($_GET['numeroCarta']) && strlen($_GET['numeroCarta']) == 16 && isset($_GET['cvvCarta']) && strlen($_GET['cvvCarta']) == 3 && isset($_GET['dataScadenzaCarta']) && isset($_GET['citta']) && isset($_GET['via']) && isset($_GET['numeroCivico'])) {
     // Recupera i valori dei parametri
     $email = $_GET['email'];
     $password = $_GET['password'];
@@ -31,6 +32,15 @@ if(isset($_GET['email']) && isset($_GET['password']) && isset($_GET['codiceFisca
     $risposta = json_encode($response);
     echo $risposta;
 } else {
-    echo "errore nella registrazione";
+    $status = "ok";
+    $response = array(
+        //status ok perchè il server non ha dato errori
+        "status" => $status,
+        //loggato con successo o meno
+        "statoRegistrazione" => false
+    );
+
+    $risposta = json_encode($response);
+    echo $risposta;
 }
 ?>

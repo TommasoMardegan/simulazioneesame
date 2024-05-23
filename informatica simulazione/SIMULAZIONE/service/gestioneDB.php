@@ -43,9 +43,9 @@ class gestioneDB
             return false;
         }
     }
-    public function registrazione($email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico, $provincia, $regione) {
+    public function registrazione($email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico) {
         // Query SQL per l'inserimento dei dati nella tabella "cliente"
-        $query = "INSERT INTO cliente (email, password, codiceFiscale, dataNascita, nome, cognome, numero, CVV, dataScadenza, citta, via, numeroCivico, provincia, regione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO cliente (email, password, codiceFiscale, dataNascita, nome, cognome, numero, CVV, dataScadenza, citta, via, numeroCivico) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
         // Prepara l'istruzione SQL
         $stmt = $this->mysqli->prepare($query);
@@ -55,7 +55,7 @@ class gestioneDB
         }
 
         // Collega i parametri alla dichiarazione preparata come stringa, stringa, ... ecc.
-        $stmt->bind_param("ssssssiisssiss", $email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico, $provincia, $regione);
+        $stmt->bind_param("sssssssisssi", $email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico);
     
         // Esegui l'istruzione preparata
         if ($stmt->execute()) {
