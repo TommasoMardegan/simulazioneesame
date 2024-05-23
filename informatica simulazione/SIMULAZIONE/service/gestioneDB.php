@@ -315,9 +315,9 @@ class gestioneDB
         return $bicicletta;
     }
     //aggiornamento dei dati della bicicletta
-    public function updateBicicletta($codiceRFID, $kmpercorsi, $codiceGPS, $longitudine, $latitudine) {
-        $stmt = $this->mysqli->prepare("UPDATE bicicletta SET kmpercorsi = ?, codiceGPS = ?, longitudine = ?, latitudine = ? WHERE codiceRFID = ?");
-        $stmt->bind_param("sssss", $kmpercorsi, $codiceGPS, $longitudine, $latitudine, $codiceRFID);
+    public function updateBicicletta($codiceRFID, $kmpercorsi, $codiceGPS, $longitudine, $latitudine, $manutenzione) {
+        $stmt = $this->mysqli->prepare("UPDATE bicicletta SET kmpercorsi = ?, codiceGPS = ?, longitudine = ?, latitudine = ?, manutenzione = ? WHERE codiceRFID = ?");
+        $stmt->bind_param("iiiisi", $kmpercorsi, $codiceGPS, $longitudine, $latitudine, $manutenzione, $codiceRFID);
         $result = $stmt->execute();
         $stmt->close();
         return $result;

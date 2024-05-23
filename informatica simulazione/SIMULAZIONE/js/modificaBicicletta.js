@@ -17,6 +17,7 @@ $(document).ready(function () {
             $('#codiceGPS').val(bicicletta.codiceGPS);
             $('#longitudine').val(bicicletta.longitudine);
             $('#latitudine').val(bicicletta.latitudine);
+            $('#manutenzione').val(bicicletta.manutenzione); // Aggiunto per il campo manutenzione
         });
     }
 
@@ -29,11 +30,12 @@ $(document).ready(function () {
             kmpercorsi: $('#kmpercorsi').val(),
             codiceGPS: $('#codiceGPS').val(),
             longitudine: $('#longitudine').val(),
-            latitudine: $('#latitudine').val()
+            latitudine: $('#latitudine').val(),
+            manutenzione: $('#manutenzione').val() // Aggiunto per il campo manutenzione
         };
         // Effettua una richiesta AJAX per salvare le modifiche
         $.post('../php/updateBicicletta.php', bicicletta, function (data) {
-            dataParsed = JSON.parse(data);
+            var dataParsed = JSON.parse(data);
             // Se il salvataggio ha avuto successo, reindirizza alla pagina principale
             if (dataParsed["message"] === true) {
                 alert('Modifiche salvate con successo.');

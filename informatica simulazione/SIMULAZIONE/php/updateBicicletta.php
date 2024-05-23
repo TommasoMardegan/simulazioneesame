@@ -9,9 +9,10 @@ $kmpercorsi = $_POST['kmpercorsi'];
 $codiceGPS = $_POST['codiceGPS'];
 $longitudine = $_POST['longitudine'];
 $latitudine = $_POST['latitudine'];
+$manutenzione = $_POST['manutenzione'];
 
 // Aggiorna i dettagli della bicicletta
-$result = $gestoreDb->updateBicicletta($codiceRFID, $kmpercorsi, $codiceGPS, $longitudine, $latitudine);
+$result = $gestoreDb->updateBicicletta($codiceRFID, $kmpercorsi, $codiceGPS, $longitudine, $latitudine, $manutenzione);
 
 $status ="ok";
 $response = array(
