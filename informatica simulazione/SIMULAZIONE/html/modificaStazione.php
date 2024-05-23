@@ -8,6 +8,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+<?php
+      if(!isset($_SESSION)) {
+        session_start();
+      }
+      if(!isset($_SESSION["tipo"]) || $_SESSION["tipo"] != "admin") {
+        header("Location: login.html");
+      }
+    ?>
     <div class="container">
         <h1>Modifica Stazione</h1>
         <form id="modifica-stazione-form">

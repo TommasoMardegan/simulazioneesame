@@ -8,6 +8,14 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
+<?php
+      if(!isset($_SESSION)) {
+        session_start();
+      }
+      if(!isset($_SESSION["tipo"]) || $_SESSION["tipo"] != "utente") {
+        header("Location: login.html");
+      }
+    ?>
     <div class="container mt-5">
         <h1>Modifica Informazioni Cliente</h1>
         <form id="modifica-cliente-form">

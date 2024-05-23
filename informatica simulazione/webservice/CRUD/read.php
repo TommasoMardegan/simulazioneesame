@@ -37,7 +37,8 @@ $codiceStazione = 10;
 $query = "
     SELECT codiceBicicletta
     FROM operazione o1
-    JOIN bicicletta b ON o1.codiceBicicletta = b.codiceRFID
+    JOIN bicicletta b 
+    ON o1.codiceBicicletta = b.codiceRFID
     WHERE o1.codiceStazione = ?
       AND o1.tipo = 'consegna'
       AND b.manutenzione = 'n'
@@ -62,7 +63,7 @@ if ($stmt) {
 
     $stmt->close();
     
-    header('Content-Type: application/json');
+    //header('Content-Type: application/json');
     echo json_encode($bicicletteDisponibili);
 } else {
     echo json_encode(["error" => "Errore nella preparazione della query: " . $mysqli->error]);

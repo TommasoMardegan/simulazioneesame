@@ -36,7 +36,7 @@ $(document).ready(function () {
             regione: $('#regione').val()
         };
         // Effettua una richiesta AJAX per salvare le modifiche
-        $.post('../php/updateStazione.php', stazione, function (data) {
+        $.post('../php/updateStazione.php', { stazione }, function (data) {
             var dataParsed = JSON.parse(data);
             // Se il salvataggio ha avuto successo, reindirizza alla pagina principale
             if (dataParsed["message"] === true) {

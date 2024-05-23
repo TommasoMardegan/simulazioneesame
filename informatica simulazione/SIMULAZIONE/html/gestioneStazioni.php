@@ -10,6 +10,14 @@
     <script src="../js/gestioneStazioni.js"></script>
 </head>
 <body>
+<?php
+      if(!isset($_SESSION)) {
+        session_start();
+      }
+      if(!isset($_SESSION["tipo"]) || $_SESSION["tipo"] != "admin") {
+        header("Location: login.html");
+      }
+    ?>
     <div class="container mt-5">
         <h1 class="mb-4">Gestione Stazioni</h1>
         <table class="table">
@@ -28,7 +36,7 @@
                 <!-- Qui verranno inserite dinamicamente le stazioni -->
             </tbody>
         </table>
-        <button class="btn btn-primary"><a href="inserisciStazione.html" style="color: white; text-decoration: none;">Inserisci stazione</a></button>
+        <button class="btn btn-primary"><a href="inserisciStazione.php" style="color: white; text-decoration: none;">Inserisci stazione</a></button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

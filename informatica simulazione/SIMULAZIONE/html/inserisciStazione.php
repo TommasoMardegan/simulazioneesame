@@ -10,6 +10,14 @@
     <script src="../js/inserisciStazione.js"></script>
 </head>
 <body>
+<?php
+      if(!isset($_SESSION)) {
+        session_start();
+      }
+      if(!isset($_SESSION["tipo"]) || $_SESSION["tipo"] != "admin") {
+        header("Location: login.html");
+      }
+    ?>
     <div class="container mt-5">
         <h2>Inserisci Nuova Stazione</h2>
         <form id="inserisci-stazione-form">

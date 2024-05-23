@@ -35,7 +35,7 @@ function calcolaDistanza($lat1, $lon1, $lat2, $lon2) {
 /**
  * quando aggiungo una bici nuova è come se l'addetto noleggiasse la bici e la consegnasse alla stazione
  */
-//ESEMPIO http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=noleggia&codiceBicicletta=110&codiceStazione=10&&codiceUtente=1
+//ESEMPIO http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=noleggia&codiceBicicletta=110&codiceUtente=1
 //il cliente appoggia la tessera quindi l'id utente ce l'ho già
 if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     //io so da dove noleggia perchè mi sto comportando come la stazione
@@ -73,7 +73,7 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     } else {
         echo "Parametri mancanti. Assicurati di fornire 'tipo', 'codiceBicicletta' e 'codiceStazione'.";
     }
-//ESEMPIO: http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=consegna&codiceBicicletta=110&codiceStazione=10&&codiceUtente=1
+//ESEMPIO: http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=consegna&codiceBicicletta=110&codiceUtente=1
 } else if(isset($_GET['tipo']) && $_GET['tipo'] == "consegna") {
     if (isset($_GET['codiceBicicletta']) && isset($_GET['codiceUtente'])) {
         $tipo = $_GET['tipo'];
@@ -120,6 +120,7 @@ if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
         echo "Parametri mancanti. Assicurati di fornire 'tipo', 'codiceBicicletta' e 'codiceUtente'.";
     }
 } //AGGIORNO LA POSIZIONE DELLA BICI E DI CONSEGUENZA CALCOLO I KM PERCORSI (CALCOLO LA DISTANZA IN KM TRA LA LOT E LONG ATTUALE E QUELLA PRECEDENTEMENTE SALVATA)
+//ESEMPIO: http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=aggiorna_locazione&codiceGPS=23&latitudine=1.2&longitudine=2.4
 else if (isset($_GET['tipo']) && $_GET['tipo'] == "aggiorna_locazione") {
     if (isset($_GET['codiceGPS']) && isset($_GET['latitudine']) && isset($_GET['longitudine'])) {
         $codiceGPS = intval($_GET['codiceGPS']);
@@ -160,7 +161,9 @@ else if (isset($_GET['tipo']) && $_GET['tipo'] == "aggiorna_locazione") {
     } else {
         echo "Parametri mancanti. Assicurati di fornire 'codiceGPS', 'latitudine' e 'longitudine'.";
     }
-} else if (isset($_GET['tipo']) && $_GET['tipo'] == "aggiorna_distanza_operazione") {
+}
+//ESEMPIO: http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=aggiorna_distanza_operazione&codiceBicicletta=110
+else if (isset($_GET['tipo']) && $_GET['tipo'] == "aggiorna_distanza_operazione") {
     if (isset($_GET['codiceBicicletta'])) {
         $codiceBicicletta = intval($_GET['codiceBicicletta']);
         $distanzaAggiuntiva = 1000; // distanza aggiuntiva in metri

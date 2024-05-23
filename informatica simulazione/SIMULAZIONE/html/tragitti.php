@@ -11,6 +11,14 @@
     <script src="../js/tragitti.js"></script>
 </head>
 <body>
+<?php
+      if(!isset($_SESSION)) {
+        session_start();
+      }
+      if(!isset($_SESSION["tipo"]) || $_SESSION["tipo"] != "utente") {
+        header("Location: login.html");
+      }
+    ?>
     <div class="container mt-5">
         <h1 class="mb-4 text-center">Riepilogo dei Tragitti</h1>
         <div class="table-responsive">

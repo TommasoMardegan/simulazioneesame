@@ -10,16 +10,23 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
+<?php
+      if(!isset($_SESSION)) {
+        session_start();
+      }
+      if(!isset($_SESSION["tipo"]) || $_SESSION["tipo"] != "utente") {
+        header("Location: login.html");
+      }
+    ?>
     <div class="container mt-5">
         <?php
-            session_start();
             echo "<h1 class='display-4'>Benvenuto, " . $_SESSION['email'] . "</h1>";  
         ?>
         <p class="lead">Benvenuto nella piattaforma delle stazioni. Puoi consultare la mappa delle stazioni utilizzando il link sottostante.</p>
         <a href="consultaMappa.html" class="btn btn-primary">Consulta Mappa delle Stazioni</a>
-        <a href="modificaCliente.html" class="btn btn-secondary">Modifica Informazioni Cliente</a>
+        <a href="modificaCliente.php" class="btn btn-secondary">Modifica Informazioni Cliente</a>
         <a href="../php/logout.php" class="btn btn-secondary">effettua il logout</a>
-        <a href="riepilogo.html" class="btn btn-primary">Riepilogo</a>
+        <a href="riepilogo.php" class="btn btn-primary">Riepilogo</a>
     </div>
 </body>
 </html>

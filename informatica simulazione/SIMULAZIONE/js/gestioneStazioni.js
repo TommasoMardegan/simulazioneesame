@@ -54,6 +54,6 @@ $(document).ready(function () {
         // Ottieni il codice RFID della bicicletta da modificare
         var codice = $(this).data('codice');
         // Reindirizza alla pagina di modifica con il codice RFID come parametro URL
-        window.location.href = 'modificaStazione.html?codice=' + codice;
+        window.location.href = 'modificaStazione.php?codice=' + codice;
     });
 });

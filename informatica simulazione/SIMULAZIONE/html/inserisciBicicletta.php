@@ -10,6 +10,14 @@
     <script src="../js/inserisciBicicletta.js"></script>
 </head>
 <body>
+    <?php
+      if(!isset($_SESSION)) {
+        session_start();
+      }
+      if(!isset($_SESSION["tipo"]) || $_SESSION["tipo"] != "admin") {
+        header("Location: login.html");
+      }
+    ?>
     <div class="container mt-5">
         <h1 class="mb-4">Inserisci Bicicletta</h1>
         <form id="inserisci-bicicletta-form">

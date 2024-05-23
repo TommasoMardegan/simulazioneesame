@@ -1,7 +1,4 @@
 $(document).ready(function () {
-    // Ottieni i parametri URL
-    var urlParams = new URLSearchParams(window.location.search);
-
     // Carica il riepilogo delle operazioni al caricamento della pagina
     loadRiepilogo();
 

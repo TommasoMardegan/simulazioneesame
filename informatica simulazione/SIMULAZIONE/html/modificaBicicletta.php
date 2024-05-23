@@ -6,6 +6,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+    <?php
+      if(!isset($_SESSION)) {
+        session_start();
+      }
+      if(!isset($_SESSION["tipo"]) || $_SESSION["tipo"] != "admin") {
+        header("Location: login.html");
+      }
+    ?>
     <div class="container">
         <h2>Modifica Bicicletta</h2>
         <form id="modifica-bicicletta-form">

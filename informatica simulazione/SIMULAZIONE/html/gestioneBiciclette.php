@@ -10,6 +10,14 @@
     <script src="../js/gestioneBiciclette.js"></script>
 </head>
 <body>
+    <?php
+      if(!isset($_SESSION)) {
+        session_start();
+      }
+      if(!isset($_SESSION["tipo"]) || $_SESSION["tipo"] != "admin") {
+        header("Location: login.html");
+      }
+    ?>
     <div class="container mt-5">
         <h1 class="mb-4">Gestione Biciclette</h1>
         <table class="table">
@@ -26,7 +34,7 @@
                 <!-- Qui verranno inserite dinamicamente le biciclette -->
             </tbody>
         </table>
-        <button class="btn btn-primary"><a href="inserisciBicicletta.html" style="color: white; text-decoration: none;">Inserisci bicicletta</a></button>
+        <button class="btn btn-primary"><a href="inserisciBicicletta.php" style="color: white; text-decoration: none;">Inserisci bicicletta</a></button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

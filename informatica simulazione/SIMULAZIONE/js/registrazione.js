@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    event.preventDefault();
     $("#registrazioneButton").click(function () {
         let email =document.getElementById("email").value;
         let password =document.getElementById("password").value;

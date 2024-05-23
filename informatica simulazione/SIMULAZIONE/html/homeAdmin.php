@@ -8,12 +8,20 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<?php
+      if(!isset($_SESSION)) {
+        session_start();
+      }
+      if(!isset($_SESSION["tipo"]) || $_SESSION["tipo"] != "admin") {
+        header("Location: login.html");
+      }
+    ?>
     <div class="container mt-5">
         <div class="text-center">
             <h1 class="mb-4">Ciao, admin</h1>
             <div class="d-grid gap-2">
-                <a href="gestioneBiciclette.html" class="btn btn-primary btn-lg mb-2">Gestisci le biciclette</a>
-                <a href="gestioneStazioni.html" class="btn btn-secondary btn-lg mb-2">Gestisci le stazioni</a>
+                <a href="gestioneBiciclette.php" class="btn btn-primary btn-lg mb-2">Gestisci le biciclette</a>
+                <a href="gestioneStazioni.php" class="btn btn-secondary btn-lg mb-2">Gestisci le stazioni</a>
                 <a href="consultaMappa.html" class="btn btn-success btn-lg">Consulta la mappa</a>
             </div>
         </div>
