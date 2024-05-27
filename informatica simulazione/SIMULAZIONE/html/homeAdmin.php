@@ -23,6 +23,8 @@
                 <a href="gestioneBiciclette.php" class="btn btn-primary btn-lg mb-2">Gestisci le biciclette</a>
                 <a href="gestioneStazioni.php" class="btn btn-secondary btn-lg mb-2">Gestisci le stazioni</a>
                 <a href="consultaMappa.html" class="btn btn-success btn-lg">Consulta la mappa</a>
+                <a href="gestioneTessere.php" class="btn btn-success btn-lg">Gestisci le tessere</a>
+                <a href="../php/logout.php" class="btn btn-secondary">effettua il logout</a>
             </div>
         </div>
     </div>
@@ -30,5 +32,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

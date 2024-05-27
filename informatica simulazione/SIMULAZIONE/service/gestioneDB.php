@@ -45,7 +45,10 @@ class gestioneDB
     }
     public function registrazione($email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico) {
         // Query SQL per l'inserimento dei dati nella tabella "cliente"
-        $query = "INSERT INTO cliente (email, password, codiceFiscale, dataNascita, nome, cognome, numero, CVV, dataScadenza, citta, via, numeroCivico) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $codiceTessera = str_pad(mt_rand(0, 9999999999), 10, '0', STR_PAD_LEFT);
+        $attivo = 's';
+        
+        $query = "INSERT INTO cliente (codiceTessera, email, password, codiceFiscale, dataNascita, nome, cognome, numero, CVV, dataScadenza, citta, via, numeroCivico, attivo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
         // Prepara l'istruzione SQL
         $stmt = $this->mysqli->prepare($query);
@@ -55,7 +58,7 @@ class gestioneDB
         }
 
         // Collega i parametri alla dichiarazione preparata come stringa, stringa, ... ecc.
-        $stmt->bind_param("sssssssisssi", $email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico);
+        $stmt->bind_param("ssssssssisssis", $codiceTessera, $email, $password, $codiceFiscale, $dataNascita, $nome, $cognome, $numeroCarta, $cvvCarta, $dataScadenzaCarta, $citta, $via, $numeroCivico, $attivo);
     
         // Esegui l'istruzione preparata
         if ($stmt->execute()) {
@@ -405,6 +408,65 @@ class gestioneDB
         $stmt->close();
         return $operazioni;
     }
+     public function aggiornaStatoUtente($email) {
+        $sql = "UPDATE cliente SET attivo='n' WHERE email=?";
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+    }
+    public function getClientiInattivi() {
+        $clientiInattivi = array();
+
+        // Query per selezionare i clienti con attivo = 'n'
+        $query = "SELECT * FROM cliente WHERE attivo = 'n'";
+        $result = $this->mysqli->query($query);
+
+        if ($result) {
+            // Estrai i risultati e aggiungili all'array dei clienti inattivi
+            while ($row = $result->fetch_assoc()) {
+                $clientiInattivi[] = $row;
+            }
+
+            // Libera la memoria del risultato
+            $result->free();
+        } else {
+            echo "Errore nella query: " . $this->mysqli->error;
+        }
+
+        return $clientiInattivi;
+    }
+    public function rigeneraTessera($idCliente) {
+        // Genera un nuovo codice tessera casuale di 10 cifre
+        $nuovoCodiceTessera = str_pad(mt_rand(0, 9999999999), 10, '0', STR_PAD_LEFT);
+        
+        // Prepara la query per aggiornare il codice tessera e reimpostare attivo a 's'
+        $stmt = $this->mysqli->prepare("UPDATE cliente SET codiceTessera = ?, attivo = 's' WHERE ID = ?");
+        
+        // Verifica se lo statement è stato preparato correttamente
+        if ($stmt === false) {
+            die("Errore durante la preparazione dello statement: " . $this->mysqli->error);
+        }
+        
+        // Bind dei parametri
+        $stmt->bind_param("si", $nuovoCodiceTessera, $idCliente);
+        
+        // Esegui lo statement
+        $result = $stmt->execute();
+        
+        // Verifica se l'esecuzione dello statement è avvenuta con successo
+        if ($result === false) {
+            die("Errore durante l'esecuzione dello statement: " . $stmt->error);
+        }
+        
+        // Chiudi lo statement
+        $stmt->close();
+        
+        // Restituisci true se l'aggiornamento è avvenuto con successo
+        return $result;
+    }
+    
     
 }
 ?>

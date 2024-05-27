@@ -27,6 +27,7 @@
         <a href="modificaCliente.php" class="btn btn-secondary">Modifica Informazioni Cliente</a>
         <a href="../php/logout.php" class="btn btn-secondary">effettua il logout</a>
         <a href="riepilogo.php" class="btn btn-primary">Riepilogo</a>
+        <a href="segnala.php" class="btn btn-primary">Segnala lo smarrimento della tessera</a>
     </div>
 </body>
 </html>

@@ -39,88 +39,109 @@ function calcolaDistanza($lat1, $lon1, $lat2, $lon2) {
 //il cliente appoggia la tessera quindi l'id utente ce l'ho già
 if(isset($_GET['tipo'])  && $_GET['tipo'] == "noleggia") {
     //io so da dove noleggia perchè mi sto comportando come la stazione
-    //mi serve idUtente e codiceBicicletta
-    if (isset($_GET['codiceBicicletta']) && isset($_GET['codiceUtente'])) {
+    //mi serve codiceTessera e codiceBicicletta
+    if (isset($_GET['codiceBicicletta']) && isset($_GET['codiceTessera'])) {
         $tipo = $_GET['tipo'];
-        $codiceUtente = intval($_GET['codiceUtente']);
+        $codiceTessera = intval($_GET['codiceTessera']);
         $codiceBicicletta = intval($_GET['codiceBicicletta']);
         //ATTENZIONE AL CODICE STAZIONE
         $codiceStazione = 10;
         $dataOra = date("Y-m-d H:i:s");
     
-        // Prepara la query di inserimento
-        $query = "INSERT INTO operazione (tipo, distanzaPercorsa, tariffa, codiceBicicletta, codiceStazione, codiceUtente, dataOra) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $mysqli->prepare($query);
-    
-        if ($stmt) {
-            // Associa i parametri alla query
-            $distanzaPercorsa = 0;
-            $tariffa = 0;
-            $stmt->bind_param("siiiiis", $tipo, $distanzaPercorsa, $tariffa, $codiceBicicletta, $codiceStazione, $codiceUtente, $dataOra);
-    
-            // Esegui la query
-            if ($stmt->execute()) {
-                echo "Noleggiata con successo!";
+        // Controlla se il cliente è attivo
+        $queryCliente = "SELECT ID FROM cliente WHERE codiceTessera = ? AND attivo = 's'";
+        $stmtCliente = $mysqli->prepare($queryCliente);
+        if ($stmtCliente) {
+            $stmtCliente->bind_param("i", $codiceTessera);
+            $stmtCliente->execute();
+            $stmtCliente->store_result();
+            $stmtCliente->bind_result($idUtente); // Associa il risultato alla variabile $idUtente
+            $stmtCliente->fetch();
+            // Non è necessario chiamare num_rows dopo fetch()
+            // $num_rows = $stmtCliente->num_rows;
+            if ($stmtCliente->num_rows > 0) { 
+                // Prepara la query di inserimento
+                $query = "INSERT INTO operazione (tipo, distanzaPercorsa, tariffa, codiceBicicletta, codiceStazione, codiceTessera, dataOra, codiceUtente) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $mysqli->prepare($query);
+            
+                if ($stmt) {
+                    // Associa i parametri alla query
+                    $distanzaPercorsa = 0;
+                    $tariffa = 0;
+                    $stmt->bind_param("sidiidsi", $tipo, $distanzaPercorsa, $tariffa, $codiceBicicletta, $codiceStazione, $codiceTessera, $dataOra, $idUtente);
+            
+                    // Esegui la query
+                    if ($stmt->execute()) {
+                        echo "Noleggiata con successo!";
+                    } else {
+                        echo "Errore nell'inserimento dei dati: " . $stmt->error;
+                    }
+            
+                    // Chiude lo statement
+                    $stmt->close();
+                } else {
+                    echo "Errore nella preparazione della query: " . $db->mysqli->error;
+                }
             } else {
-                echo "Errore nell'inserimento dei dati: " . $stmt->error;
+                echo "la tessera non è attiva.";
             }
-    
-            // Chiude lo statement
-            $stmt->close();
+            $stmtCliente->close();
         } else {
-            echo "Errore nella preparazione della query: " . $db->mysqli->error;
+            echo "Errore nella preparazione della query: " . $mysqli->error;
         }
     } else {
         echo "Parametri mancanti. Assicurati di fornire 'tipo', 'codiceBicicletta' e 'codiceStazione'.";
     }
-//ESEMPIO: http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=consegna&codiceBicicletta=110&codiceUtente=1
+//ESEMPIO: http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=consegna&codiceBicicletta=110&codiceTessera=8230707143
 } else if(isset($_GET['tipo']) && $_GET['tipo'] == "consegna") {
-    if (isset($_GET['codiceBicicletta']) && isset($_GET['codiceUtente'])) {
+    if (isset($_GET['codiceBicicletta']) && isset($_GET['codiceTessera'])) {
         $tipo = $_GET['tipo'];
-        $codiceUtente = intval($_GET['codiceUtente']);
+        $codiceTessera = intval($_GET['codiceTessera']);
         $codiceBicicletta = intval($_GET['codiceBicicletta']);
         $codiceStazione = 10;
         $dataOraConsegna = date("Y-m-d H:i:s");
 
-        // Ottieni la data di inizio del noleggio
-        $query = "SELECT dataOra, distanzaPercorsa FROM operazione WHERE codiceBicicletta = ? AND codiceUtente = ? AND tipo = 'noleggia' ORDER BY dataOra DESC LIMIT 1";
+        $query = "SELECT dataOra, distanzaPercorsa, codiceUtente FROM operazione WHERE codiceBicicletta = ? AND codiceTessera = ? AND tipo = 'noleggia' ORDER BY dataOra DESC LIMIT 1";
         $stmt = $mysqli->prepare($query);
         if ($stmt) {
-            $stmt->bind_param("ii", $codiceBicicletta, $codiceUtente);
+            $stmt->bind_param("ii", $codiceBicicletta, $codiceTessera);
             $stmt->execute();
-            $stmt->bind_result($dataOraInizio, $distanzaPercorsa);
+            $stmt->bind_result($dataOraInizio, $distanzaPercorsa, $idUtente);
             $stmt->fetch();
             $stmt->close();
-        }
 
-        if ($dataOraInizio) {
-            $tariffa = calcolaTariffa($dataOraInizio, $dataOraConsegna);
+            if ($dataOraInizio) {
+                $tariffa = calcolaTariffa($dataOraInizio, $dataOraConsegna);
 
-            // Inserisci i dati della consegna
-            $query = "INSERT INTO operazione (tipo, distanzaPercorsa, tariffa, codiceBicicletta, codiceStazione, codiceUtente, dataOra) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $mysqli->prepare($query);
+                // Inserisci i dati della consegna
+                $query = "INSERT INTO operazione (tipo, distanzaPercorsa, tariffa, codiceBicicletta, codiceStazione, codiceTessera, dataOra, codiceUtente) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $mysqli->prepare($query);
 
-            if ($stmt) {
-                $stmt->bind_param("sidiiis", $tipo, $distanzaPercorsa, $tariffa, $codiceBicicletta, $codiceStazione, $codiceUtente, $dataOraConsegna);
+                if ($stmt) {
+                    $stmt->bind_param("sidiiiss", $tipo, $distanzaPercorsa, $tariffa, $codiceBicicletta, $codiceStazione, $codiceTessera, $dataOraConsegna, $idUtente);
 
-                if ($stmt->execute()) {
-                    echo "Dati di consegna inseriti con successo!";
+                    if ($stmt->execute()) {
+                        echo "Dati di consegna inseriti con successo!";
+                    } else {
+                        echo "Errore nell'inserimento dei dati di consegna: " . $stmt->error;
+                    }
+
+                    $stmt->close();
                 } else {
-                    echo "Errore nell'inserimento dei dati di consegna: " . $stmt->error;
+                    echo "Errore nella preparazione della query: " . $mysqli->error;
                 }
-
-                $stmt->close();
             } else {
-                echo "Errore nella preparazione della query: " . $mysqli->error;
+                echo "Nessun noleggio trovato per questa bicicletta e tessera.";
             }
         } else {
-            echo "Nessun noleggio trovato per questa bicicletta e utente.";
+            echo "Errore nella preparazione della query: " . $mysqli->error;
         }
     } else {
-        echo "Parametri mancanti. Assicurati di fornire 'tipo', 'codiceBicicletta' e 'codiceUtente'.";
+        echo "Parametri mancanti. Assicurati di fornire 'codiceBicicletta' e 'codiceTessera'.";
     }
-} //AGGIORNO LA POSIZIONE DELLA BICI E DI CONSEGUENZA CALCOLO I KM PERCORSI (CALCOLO LA DISTANZA IN KM TRA LA LOT E LONG ATTUALE E QUELLA PRECEDENTEMENTE SALVATA)
-//ESEMPIO: http://localhost/simulazioneProva/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=aggiorna_locazione&codiceGPS=23&latitudine=1.2&longitudine=2.4
+}
+ //AGGIORNO LA POSIZIONE DELLA BICI E DI CONSEGUENZA CALCOLO I KM PERCORSI (CALCOLO LA DISTANZA IN KM TRA LA LOT E LONG ATTUALE E QUELLA PRECEDENTEMENTE SALVATA)
+//ESEMPIO: http://localhost/simulazione_v2/simulazioneesame/informatica%20simulazione/webservice/CRUD/create.php?tipo=aggiorna_locazione&codiceGPS=33&longitudine=2.5&latitudine=2.4
 else if (isset($_GET['tipo']) && $_GET['tipo'] == "aggiorna_locazione") {
     if (isset($_GET['codiceGPS']) && isset($_GET['latitudine']) && isset($_GET['longitudine'])) {
         $codiceGPS = intval($_GET['codiceGPS']);
